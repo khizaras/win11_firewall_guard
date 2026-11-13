@@ -1,0 +1,7 @@
+{
+  "poll_interval_seconds": 3,
+  "audit_refresh_interval_seconds": 20,
+  "dry_run": false,
+  "max_events": 200,
+  "database_path": "data/firewall_guard_pro.db"
+}

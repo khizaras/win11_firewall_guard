@@ -1,0 +1,9 @@
+Program 'powershell.exe' failed to run: The filename or extension is too longAt line:1 char:221
++ ... es.Groups ; powershell -NoProfile -Command $t=Get-Content -Raw 'C:\de ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+At line:1 char:221
++ ... es.Groups ; powershell -NoProfile -Command $t=Get-Content -Raw 'C:\de ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (:) [], ApplicationFailedException
+    + FullyQualifiedErrorId : NativeCommandFailed
+ 

@@ -1,0 +1,24 @@
+:root {
+  font-family: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+* { box-sizing: border-box; }
+html { color-scheme: light dark; }
+body {
+  margin: 0;
+  min-width: 360px;
+  min-height: 100vh;
+  background: #ffffff;
+}
+button, input, textarea { font: inherit; }
+
+/* Slim custom scrollbars in table wells */
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb { background: rgba(128, 128, 128, 0.4); border-radius: 6px; border: 2px solid transparent; background-clip: content-box; }
+*::-webkit-scrollbar-thumb:hover { background: rgba(128, 128, 128, 0.6); border: 2px solid transparent; background-clip: content-box; }
+*::-webkit-scrollbar-track { background: transparent; }
+
+/* Fluent DataGrid density tweaks for dense telemetry tables */
+.fui-DataGridCell, .fui-TableCell { border-color: color-mix(in srgb, currentColor 8%, transparent); }

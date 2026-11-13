@@ -1,0 +1,4 @@
+.venv/
+*/__pycache__/
+firewall_guard_fluent/backend/app/__pycache__/
+firewall_guard_fluent/frontend/node_modules/

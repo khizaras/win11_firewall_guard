@@ -1,0 +1,20 @@
+{
+  "policies": [
+    {
+      "id": "example-updater",
+      "name": "Example updater rule",
+      "enabled": false,
+      "automatic": true,
+      "direction": "outbound",
+      "action": "block",
+      "process_name_patterns": [
+        "*untrusted-updater*"
+      ],
+      "service_name_patterns": [],
+      "program_paths": [],
+      "remote_ips": [],
+      "remote_ports": [],
+      "protocol": "Any"
+    }
+  ]
+}

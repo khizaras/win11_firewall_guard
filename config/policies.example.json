@@ -1,0 +1,20 @@
+{
+  "policies": [
+    {
+      "id": "example-wildcard-policy",
+      "name": "Example wildcard policy (disabled)",
+      "enabled": false,
+      "automatic": true,
+      "action": "block",
+      "direction": "outbound",
+      "process_name_patterns": [
+        "*untrusted-updater*"
+      ],
+      "service_name_patterns": [],
+      "program_paths": [],
+      "remote_ips": [],
+      "remote_ports": [],
+      "protocol": "Any"
+    }
+  ]
+}
