@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Features — Firewall Guard</title>
+  <meta name="description" content="Processes, traffic, domain patterns, system monitoring, and managed firewall rules in Firewall Guard.">
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to content</a>
+  <header class="global">
+    <a class="wordmark" href="index.html">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="#fff" d="M8 1.2 2.2 3.2v4.2c0 3.1 2.1 6 5.8 6.9 3.7-.9 5.8-3.8 5.8-6.9V3.2L8 1.2Z"/></svg>
+      Firewall Guard
+    </a>
+    <button class="menu" type="button" aria-expanded="false">Menu</button>
+    <nav aria-label="Site">
+      <a href="index.html">Overview</a>
+      <a href="features.html">Features</a>
+      <a href="specifications.html">Specifications</a>
+      <a href="operations.html">Operations</a>
+    </nav>
+  </header>
+  <div class="productbar">
+    <strong>Firewall Guard</strong>
+    <div class="links">
+      <a href="index.html">Overview</a>
+      <a href="features.html" aria-current="page">Features</a>
+      <a href="specifications.html">Specifications</a>
+      <a href="operations.html">Operations</a>
+      <a class="cta" href="operations.html">How to run it</a>
+    </div>
+  </div>
+
+  <main id="content">
+    <section class="hero" style="min-height:auto; padding-bottom:80px">
+      <h1 class="reveal">Every page earns its place.</h1>
+      <p class="sub reveal">Protection. Network. Performance.</p>
+      <p class="fine reveal">The same details view throughout. Sort a column. Filter it. Open the row.</p>
+    </section>
+
+    <section class="chapter">
+      <div class="pair">
+        <div class="copy reveal">
+          <h2>Know the process before you block it.</h2>
+          <p>Services show status, start mode, logon account, and the host command. Processes show CPU, memory, and disk rate. Open one for the signer, version, command line, and parent, when Windows can supply them.</p>
+        </div>
+        <div class="frame reveal" aria-hidden="true">
+          <svg viewBox="0 0 480 300">
+            <rect width="480" height="300" rx="20" fill="#fff"/>
+            <text x="24" y="40" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="12">Process</text>
+            <text x="24" y="72" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="22" font-weight="650">python.exe</text>
+            <text x="24" y="98" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">PID 25336</text>
+            <rect x="24" y="122" width="200" height="56" rx="12" fill="#f5f5f7"/>
+            <text x="38" y="146" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="12">Working set</text>
+            <text x="38" y="166" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="16" font-weight="650">40.7 GB</text>
+            <rect x="240" y="122" width="210" height="56" rx="12" fill="#f5f5f7"/>
+            <text x="254" y="146" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="12">Signature</text>
+            <text x="254" y="166" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="16" font-weight="650">Valid</text>
+            <text x="24" y="220" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">Company, version, and command line open in the drawer.</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter stage">
+      <div class="pair reverse">
+        <div class="frame reveal" aria-hidden="true">
+          <svg viewBox="0 0 480 300">
+            <rect width="480" height="300" rx="20" fill="#fff"/>
+            <text x="24" y="42" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="16" font-weight="650">Connections</text>
+            <text x="24" y="88" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="14">203.0.113.10</text>
+            <text x="180" y="88" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="14">TCP</text>
+            <text x="250" y="88" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="14">msedge.exe</text>
+            <text x="24" y="128" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="14">203.0.113.44</text>
+            <text x="180" y="128" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="14">UDP</text>
+            <text x="250" y="128" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="14">svchost.exe</text>
+            <rect x="24" y="180" width="180" height="36" rx="980" fill="#0071e3"/>
+            <text x="44" y="203" fill="#fff" font-family="Segoe UI, sans-serif" font-size="14">Block selected IPs</text>
+          </svg>
+        </div>
+        <div class="copy reveal">
+          <h2>Sockets, then a decision.</h2>
+          <p>TCP and UDP, IPv4 and IPv6, with the owning process. Select the remote endpoints. One batch blocks the distinct addresses. The list is a snapshot. Windows can hide some PIDs.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter black">
+      <div class="pair">
+        <div class="copy reveal">
+          <h2>A pattern becomes addresses.</h2>
+          <p style="color:#a1a1a6">Wildcard domain rules resolve through the DNS cache and Resolve-DnsName. The elevated worker can refresh that set about every five minutes. The block is on the address, not on the name inside an encrypted session.</p>
+        </div>
+        <div class="frame reveal" aria-hidden="true">
+          <svg viewBox="0 0 480 260">
+            <text x="20" y="48" fill="#f5f5f7" font-family="ui-monospace, monospace" font-size="22">*example.com*</text>
+            <path d="M40 80 V140" stroke="#6e6e73" stroke-width="1.5"/>
+            <path d="M40 140 H360" stroke="#6e6e73" stroke-width="1.5"/>
+            <circle cx="120" cy="140" r="6" fill="#0071e3"/>
+            <circle cx="220" cy="140" r="6" fill="#0071e3"/>
+            <circle cx="320" cy="140" r="6" fill="#0071e3"/>
+            <text x="90" y="180" fill="#d2d2d7" font-family="Segoe UI, sans-serif" font-size="14">203.0.113.10</text>
+            <text x="190" y="210" fill="#d2d2d7" font-family="Segoe UI, sans-serif" font-size="14">203.0.113.22</text>
+            <text x="290" y="180" fill="#d2d2d7" font-family="Segoe UI, sans-serif" font-size="14">203.0.113.44</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <div class="center narrow reveal">
+        <h2 class="display">Charts that keep moving.</h2>
+        <p class="lede">System monitor samples CPU, memory, network, and disk every few seconds. Per-core load and the busiest processes stay on the same page.</p>
+      </div>
+      <div class="wide reveal" style="margin-top:40px" aria-hidden="true">
+        <svg viewBox="0 0 1000 280">
+          <rect width="1000" height="280" rx="28" fill="#f5f5f7"/>
+          <path d="M40 200 C 120 190, 160 80, 240 90 S 360 170, 440 120 560 60 640 80 760 160 860 110 940 90 960 70" fill="none" stroke="#0071e3" stroke-width="3" class="draw"/>
+          <text x="40" y="48" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="18" font-weight="650">CPU and memory</text>
+          <text x="760" y="48" fill="#0071e3" font-family="Segoe UI, sans-serif" font-size="14">CPU 4%</text>
+          <text x="840" y="48" fill="#30b04a" font-family="Segoe UI, sans-serif" font-size="14">Memory 61%</text>
+        </svg>
+      </div>
+    </section>
+
+    <section class="chapter stage">
+      <div class="pair">
+        <div class="copy reveal">
+          <h2>Policies are a catalog.</h2>
+          <p>A policy can name process patterns, services, paths, addresses, and ports. Nothing in the background turns that file into firewall rules. A block still happens only when you apply it.</p>
+        </div>
+        <div class="copy reveal">
+          <h2>Events stay structured.</h2>
+          <p>Firewall log rows show direction, application, and the path from source to destination. Open the row. Start a block from the application path when it is known.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="foot">
+    <span>Feature illustrations describe the console. They are not live data.</span>
+    <a href="specifications.html">Specifications</a>
+  </footer>
+  <script src="site.js"></script>
+</body>
+</html>

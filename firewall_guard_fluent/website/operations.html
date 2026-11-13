@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Operations — Firewall Guard</title>
+  <meta name="description" content="Start Firewall Guard, understand dry-run and UAC, and keep the API on this PC.">
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to content</a>
+  <header class="global">
+    <a class="wordmark" href="index.html">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="#fff" d="M8 1.2 2.2 3.2v4.2c0 3.1 2.1 6 5.8 6.9 3.7-.9 5.8-3.8 5.8-6.9V3.2L8 1.2Z"/></svg>
+      Firewall Guard
+    </a>
+    <button class="menu" type="button" aria-expanded="false">Menu</button>
+    <nav aria-label="Site">
+      <a href="index.html">Overview</a>
+      <a href="features.html">Features</a>
+      <a href="specifications.html">Specifications</a>
+      <a href="operations.html">Operations</a>
+    </nav>
+  </header>
+  <div class="productbar">
+    <strong>Firewall Guard</strong>
+    <div class="links">
+      <a href="index.html">Overview</a>
+      <a href="features.html">Features</a>
+      <a href="specifications.html">Specifications</a>
+      <a href="operations.html" aria-current="page">Operations</a>
+      <a class="cta" href="#start">Start</a>
+    </div>
+  </div>
+
+  <main id="content">
+    <section class="hero" style="min-height:auto; padding-bottom:20px">
+      <h1 class="reveal">Run it here.</h1>
+      <p class="sub reveal">Two windows. This PC only.</p>
+    </section>
+
+    <section class="chapter" id="start">
+      <div class="wide">
+        <article class="reveal" style="padding:28px 0; border-top:1px solid rgba(0,0,0,.08)">
+          <h2 class="display" style="font-size:40px">Start Firewall Guard.bat</h2>
+          <p class="lede" style="margin-left:0">Prepares Python when dependencies change, waits for port 8765, then opens http://127.0.0.1:5173.</p>
+        </article>
+        <article class="reveal" style="padding:28px 0; border-top:1px solid rgba(0,0,0,.08)">
+          <h2 class="display" style="font-size:40px">Leave both consoles open.</h2>
+          <p class="lede" style="margin-left:0">One is the API. One is the dashboard. Closing them stops the app. Stop Firewall Guard.bat releases the ports.</p>
+        </article>
+        <article class="reveal" style="padding:28px 0; border-top:1px solid rgba(0,0,0,.08)">
+          <h2 class="display" style="font-size:40px">Or serve the built files.</h2>
+          <p class="lede" style="margin-left:0">After <code>npm run build</code> in frontend, the API can serve the dashboard at http://127.0.0.1:8765.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="chapter black">
+      <div class="pair">
+        <div class="copy reveal">
+          <h2>Dry-run.</h2>
+          <p style="color:#a1a1a6">Records the intent. Does not change Windows Firewall. This is the default.</p>
+        </div>
+        <div class="copy reveal">
+          <h2>Live.</h2>
+          <p style="color:#a1a1a6">You confirm in the app, then Windows asks once. If you dismiss the prompt, nothing is marked verified.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter stage">
+      <div class="center narrow reveal">
+        <h2 class="display">Keep the token local.</h2>
+        <p class="lede">Replace the development token in backend/config/settings.json and set the same value as VITE_API_TOKEN before this leaves a test machine. Do not publish port 8765.</p>
+      </div>
+      <div class="tiles wide">
+        <article class="tile reveal">
+          <h3>Rule batch.</h3>
+          <p>One prompt, up to 50 targets, a result on every row.</p>
+        </article>
+        <article class="tile reveal">
+          <h3>Domain worker.</h3>
+          <p>A separate approval refreshes wildcard addresses.</p>
+        </article>
+        <article class="tile reveal">
+          <h3>Audit and capture.</h3>
+          <p>Event visibility needs the firewall audit policy. Byte totals are optional and still do not show contents.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <div class="narrow reveal">
+        <h2 class="display">If the page is empty.</h2>
+        <p class="lede" style="margin-left:0">The dashboard cannot see the API. Start the launcher and wait until the backend is listening. A rule that is verified can still leave an existing session up. A GPU page stays quiet when Windows exposes no counters, rather than inventing a number.</p>
+      </div>
+    </section>
+  </main>
+  <footer class="foot">
+    <span>Dry-run first. Block only a target you can undo.</span>
+    <a href="index.html">Overview</a>
+  </footer>
+  <script src="site.js"></script>
+</body>
+</html>

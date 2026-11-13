@@ -1,6 +1,22 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { FluentProvider, webDarkTheme, webLightTheme, type Theme } from '@fluentui/react-components';
 
+/** Segoe UI Variable and WinUI radii, on top of the Fluent 2 web theme. */
+function windowsTheme(base: Theme): Theme {
+  return {
+    ...base,
+    fontFamilyBase: '"Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif',
+    fontFamilyMonospace: '"Cascadia Mono", Consolas, monospace',
+    fontFamilyNumeric: '"Segoe UI Variable Display", "Segoe UI Variable", "Segoe UI", sans-serif',
+    borderRadiusSmall: '2px',
+    borderRadiusMedium: '4px',
+    borderRadiusLarge: '8px',
+    borderRadiusXLarge: '8px',
+    shadow2: 'none',
+    shadow4: '0 8px 16px rgba(0, 0, 0, 0.14)',
+  };
+}
+
 export type ThemeMode = 'system' | 'light' | 'dark';
 const STORAGE_KEY = 'fgf.themeMode';
 
@@ -30,10 +46,10 @@ export function FluentThemeProvider({ children }: { children: ReactNode }) {
   };
 
   const isDark = mode === 'dark' || (mode === 'system' && systemDark);
-  const theme = isDark ? webDarkTheme : webLightTheme;
+  const theme = windowsTheme(isDark ? webDarkTheme : webLightTheme);
 
   useEffect(() => {
-    document.body.style.background = theme.colorNeutralBackground1;
+    document.body.style.background = theme.colorNeutralBackground3;
     document.body.style.color = theme.colorNeutralForeground1;
   }, [theme]);
 

@@ -9,7 +9,7 @@ import { PathCell } from './ui';
 
 const useStyles = makeStyles({
   row: { display: 'flex', flexDirection: 'column', gap: '2px', padding: '9px 0', borderBottom: `1px solid ${tokens.colorNeutralStroke2}` },
-  key: { color: tokens.colorNeutralForeground3, fontSize: tokens.fontSizeBase100, textTransform: 'uppercase', letterSpacing: '0.06em' },
+  key: { color: tokens.colorNeutralForeground2, fontSize: '12px', lineHeight: '16px' },
   val: { fontSize: tokens.fontSizeBase300, overflowWrap: 'anywhere', lineHeight: '1.4' },
   note: { marginTop: '12px', color: tokens.colorNeutralForeground3 },
 });

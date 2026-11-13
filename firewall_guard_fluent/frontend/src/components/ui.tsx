@@ -27,33 +27,60 @@ export function matchAny(values: (string | number | undefined)[], pattern: strin
 
 /* ---------- styles ---------- */
 const useStyles = makeStyles({
-  pageIntro: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '16px', marginBottom: tokens.spacingVerticalL },
+  pageIntro: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px', margin: '0 0 20px' },
   introText: { display: 'flex', flexDirection: 'column', gap: '4px', minWidth: 0 },
-  eyebrow: { color: tokens.colorBrandForeground1, fontSize: tokens.fontSizeBase100, fontWeight: tokens.fontWeightSemibold, letterSpacing: '0.12em', textTransform: 'uppercase' },
-  pageTitle: { margin: 0, letterSpacing: '-0.02em' },
-  pageDesc: { color: tokens.colorNeutralForeground2, fontSize: tokens.fontSizeBase300, maxWidth: '800px', lineHeight: '1.5' },
-  panel: { padding: `${tokens.spacingVerticalL} ${tokens.spacingHorizontalL}`, border: `1px solid ${tokens.colorNeutralStroke2}`, borderRadius: tokens.borderRadiusLarge, boxShadow: tokens.shadow2, background: tokens.colorNeutralBackground1 },
-  panelHeaderInner: { display: 'flex', justifyContent: 'space-between', gap: '12px', alignItems: 'flex-start' },
-  metricCard: { padding: `${tokens.spacingVerticalM} ${tokens.spacingHorizontalL}`, minHeight: '140px', display: 'flex', flexDirection: 'column', gap: '6px' },
-  metricIcon: { width: '38px', height: '38px', borderRadius: tokens.borderRadiusMedium, display: 'grid', placeItems: 'center', background: tokens.colorBrandBackground2, color: tokens.colorBrandForeground1 },
-  metricLabel: { color: tokens.colorNeutralForeground2, fontSize: tokens.fontSizeBase200, fontWeight: tokens.fontWeightSemibold },
-  metricValue: { fontSize: '24px', fontWeight: tokens.fontWeightBold, lineHeight: 1.25, overflowWrap: 'anywhere' },
-  metricDetail: { color: tokens.colorNeutralForeground3, fontSize: tokens.fontSizeBase100 },
+  pageTitle: { margin: 0, fontFamily: tokens.fontFamilyNumeric, fontSize: '28px', lineHeight: '36px', fontWeight: tokens.fontWeightSemibold },
+  pageDesc: { color: tokens.colorNeutralForeground2, fontSize: '14px', maxWidth: '68ch', lineHeight: '20px' },
+  panel: {
+    padding: '4px 16px 16px',
+    border: `1px solid ${tokens.colorNeutralStroke2}`,
+    borderRadius: '8px',
+    boxShadow: 'none',
+    background: tokens.colorNeutralBackground1,
+    gap: '8px',
+  },
+  panelHeaderInner: { display: 'flex', justifyContent: 'space-between', gap: '12px', alignItems: 'center', minHeight: '40px' },
+  metricCard: {
+    padding: '14px 16px',
+    minHeight: '96px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '2px',
+    border: `1px solid ${tokens.colorNeutralStroke2}`,
+    borderRadius: '8px',
+    background: tokens.colorNeutralBackground1,
+    boxShadow: 'none',
+    textAlign: 'left',
+    color: 'inherit',
+    font: 'inherit',
+    width: '100%',
+    cursor: 'default',
+  },
+  metricButton: { cursor: 'pointer', ':hover': { background: tokens.colorNeutralBackground1Hover }, ':active': { background: tokens.colorNeutralBackground1Pressed } },
+  metricTop: { display: 'flex', alignItems: 'center', gap: '8px', color: tokens.colorNeutralForeground2 },
+  metricIcon: { display: 'grid', placeItems: 'center', width: '20px', height: '20px', flexShrink: 0 },
+  metricLabel: { fontSize: '14px', fontWeight: tokens.fontWeightSemibold, flex: 1 },
+  metricValue: { fontFamily: tokens.fontFamilyNumeric, fontSize: '22px', fontWeight: tokens.fontWeightSemibold, lineHeight: '28px', overflowWrap: 'anywhere', fontVariantNumeric: 'tabular-nums' },
+  metricDetail: { color: tokens.colorNeutralForeground2, fontSize: '12px', lineHeight: '16px' },
   muted: { color: tokens.colorNeutralForeground3 },
-  mono: { fontFamily: 'Consolas, "Cascadia Code", monospace', fontSize: tokens.fontSizeBase100 },
-  secondary: { display: 'block', color: tokens.colorNeutralForeground3, fontSize: tokens.fontSizeBase100, marginTop: '3px', lineHeight: 1.4 },
-  empty: { padding: '32px', textAlign: 'center', color: tokens.colorNeutralForeground3, fontSize: tokens.fontSizeBase200 },
-  pathCell: { display: 'block', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: tokens.colorNeutralForeground2, fontFamily: 'Consolas, "Cascadia Code", monospace', fontSize: tokens.fontSizeBase100 },
+  mono: { fontFamily: tokens.fontFamilyMonospace, fontSize: tokens.fontSizeBase200 },
+  secondary: { display: 'block', color: tokens.colorNeutralForeground2, fontSize: '12px', marginTop: '2px', lineHeight: '16px' },
+  empty: { padding: '28px 16px', textAlign: 'center', color: tokens.colorNeutralForeground2, fontSize: '14px' },
+  pathCell: { display: 'block', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: tokens.colorNeutralForeground2, fontFamily: tokens.fontFamilyMonospace, fontSize: '12px' },
+  meter: { display: 'grid', gridTemplateColumns: '140px minmax(0, 1fr) 72px', gap: '12px', alignItems: 'center', minHeight: '28px' },
+  meterLabel: { fontSize: '14px', color: tokens.colorNeutralForeground1 },
+  meterTrack: { height: '4px', borderRadius: '2px', background: tokens.colorNeutralBackground5, overflow: 'hidden' },
+  meterFill: { height: '100%', borderRadius: '2px' },
+  meterValue: { textAlign: 'right', fontVariantNumeric: 'tabular-nums', fontWeight: tokens.fontWeightSemibold, fontSize: '14px' },
 });
 
 /* ---------- basic blocks ---------- */
-export function PageIntro({ eyebrow, title, desc, action }: { eyebrow: string; title: string; desc: string; action?: React.ReactNode }) {
+export function PageIntro({ title, desc, action }: { eyebrow?: string; title: string; desc: string; action?: React.ReactNode }) {
   const s = useStyles();
   return (
     <div className={s.pageIntro}>
       <div className={s.introText}>
-        <Text className={s.eyebrow}>{eyebrow}</Text>
-        <Text as="h1" size={600} weight="semibold" className={s.pageTitle}>{title}</Text>
+        <Text as="h1" className={s.pageTitle}>{title}</Text>
         <Text className={s.pageDesc}>{desc}</Text>
       </div>
       {action}
@@ -81,16 +108,22 @@ export function Panel({ title, subtitle, children, action }: { title: string; su
   );
 }
 
-export function Metric({ label, value, detail, icon, tone }: { label: string; value: React.ReactNode; detail?: string; icon: React.ReactNode; tone?: 'brand' | 'orange' | 'green' | 'red' }) {
+export function Metric({ label, value, detail, icon, onClick }: { label: string; value: React.ReactNode; detail?: string; icon: React.ReactNode; tone?: 'brand' | 'orange' | 'green' | 'red'; onClick?: () => void }) {
   const s = useStyles();
-  return (
-    <Card className={s.metricCard}>
-      <div className={s.metricIcon}>{icon}</div>
-      <Text className={s.metricLabel}>{label}</Text>
+  const body = (
+    <>
+      <div className={s.metricTop}>
+        <span className={s.metricIcon}>{icon}</span>
+        <Text className={s.metricLabel}>{label}</Text>
+      </div>
       <Text className={s.metricValue}>{value ?? '—'}</Text>
       {detail && <Text className={s.metricDetail}>{detail}</Text>}
-    </Card>
+    </>
   );
+  if (onClick) {
+    return <button type="button" className={mergeClasses(s.metricCard, s.metricButton)} onClick={onClick}>{body}</button>;
+  }
+  return <div className={s.metricCard}>{body}</div>;
 }
 
 export function Empty({ children = 'No matching records.' }: { children?: React.ReactNode }) {
@@ -127,13 +160,14 @@ export function Sparkline({ values, width = 220, height = 42, color }: { values:
   return <svg width={width} height={height} aria-hidden="true" style={{ display: 'block' }}><polyline fill="none" stroke={stroke} strokeWidth={1.6} points={pts} /></svg>;
 }
 export function MeterRow({ label, valueText, fraction, tone }: { label: string; valueText: string; fraction: number; tone?: 'brand' | 'error' }) {
+  const s = useStyles();
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-      <span style={{ minWidth: 120, fontSize: 12, color: 'inherit' }}>{label}</span>
-      <div style={{ flex: 1, height: 6, borderRadius: 99, background: tokens.colorNeutralBackground5, overflow: 'hidden' }}>
-        <div style={{ width: `${Math.min(100, Math.max(0, fraction * 100))}%`, height: '100%', borderRadius: 99, background: tone === 'error' ? tokens.colorPaletteRedBackground3 : tokens.colorBrandBackground }} />
+    <div className={s.meter}>
+      <span className={s.meterLabel}>{label}</span>
+      <div className={s.meterTrack}>
+        <div className={s.meterFill} style={{ width: `${Math.min(100, Math.max(0, fraction * 100))}%`, background: tone === 'error' ? tokens.colorPaletteRedBackground3 : tokens.colorBrandBackground }} />
       </div>
-      <span style={{ minWidth: 74, textAlign: 'right', fontWeight: 600 }}>{valueText}</span>
+      <span className={s.meterValue}>{valueText}</span>
     </div>
   );
 }

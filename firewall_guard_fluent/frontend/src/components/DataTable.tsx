@@ -131,9 +131,9 @@ export function DataTable<T>(props: Props<T>) {
     <div className="fg-grid-wrap">
       <div className="fg-grid-meta">
         <Text size={200}>
-          {sorted.length === items.length ? `${items.length} rows` : `${sorted.length} of ${items.length} rows`}
-          {sort.columnId ? ` · sorted by ${columns.find(c => c.columnId === sort.columnId)?.title ?? sort.columnId}` : ''}
-          {onRowClick ? ' · click a row for details' : ''}
+          {sorted.length === items.length ? `${items.length} items` : `${sorted.length} of ${items.length} items`}
+          {sort.columnId ? `. Sorted by ${columns.find(c => c.columnId === sort.columnId)?.title ?? sort.columnId}` : ''}
+          {onRowClick ? '. Select a row to open details.' : ''}
         </Text>
         {activeFilters.length > 0 && (
           <Button appearance="subtle" size="small" onClick={() => setFilters({})}>Clear {activeFilters.length} column filter{activeFilters.length === 1 ? '' : 's'}</Button>
@@ -211,6 +211,12 @@ export function DataTable<T>(props: Props<T>) {
                   key={id}
                   className={onRowClick ? 'clickable' : undefined}
                   data-selected={selected || undefined}
+                  tabIndex={onRowClick ? 0 : undefined}
+                  onKeyDown={onRowClick ? (event) => {
+                    if (event.key !== 'Enter' && event.key !== ' ') return;
+                    event.preventDefault();
+                    onRowClick(item);
+                  } : undefined}
                   onClick={onRowClick ? (event) => {
                     const target = event.target as HTMLElement | null;
                     if (target?.closest('button, a, input, select, textarea, label')) return;

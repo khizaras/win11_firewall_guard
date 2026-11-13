@@ -10,7 +10,7 @@ import { fmtBytes, fmtRate, fmtTime, PathCell, Secondary } from './ui';
 
 const useStyles = makeStyles({
   row: { display: 'flex', flexDirection: 'column', gap: '2px', padding: '9px 0', borderBottom: `1px solid ${tokens.colorNeutralStroke2}` },
-  key: { color: tokens.colorNeutralForeground3, fontSize: tokens.fontSizeBase100, textTransform: 'uppercase', letterSpacing: '0.06em' },
+  key: { color: tokens.colorNeutralForeground2, fontSize: '12px', lineHeight: '16px' },
   val: { fontSize: tokens.fontSizeBase200, overflowWrap: 'anywhere' },
   section: { marginBottom: tokens.spacingVerticalL },
   cmdline: { fontFamily: 'Consolas, "Cascadia Code", monospace', fontSize: tokens.fontSizeBase100, background: tokens.colorNeutralBackground3, padding: '8px 10px', borderRadius: tokens.borderRadiusMedium, overflowWrap: 'anywhere' },

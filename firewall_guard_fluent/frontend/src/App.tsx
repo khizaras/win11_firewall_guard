@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   Badge, Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle,
   Menu, MenuPopover, MenuTrigger, MenuList, MenuItem, MessageBar, MessageBarBody,
-  Spinner, Switch, Tab, TabList, Text, Tooltip, Toaster, makeStyles, tokens, useToastController,
+  Spinner, Switch, Text, Tooltip, Toaster, makeStyles, mergeClasses, tokens, useToastController,
 } from '@fluentui/react-components';
 import {
   ArrowSync24Regular, Checkmark24Regular, Home24Regular, Desktop24Regular, Globe24Regular, DataUsage24Regular,
@@ -26,39 +26,93 @@ import { RulesPage } from './pages/RulesPage';
 import { useTheme, type ThemeMode } from './theme';
 
 type PageId = 'overview' | 'processes' | 'connections' | 'traffic' | 'monitor' | 'memory' | 'gpu' | 'disk' | 'events' | 'policies' | 'rules';
-const NAV: [PageId, string, React.FC][] = [
-  ['overview', 'Overview', Home24Regular],
-  ['processes', 'Processes & services', Desktop24Regular],
-  ['connections', 'Network connections', Globe24Regular],
-  ['traffic', 'Traffic inspector', ArrowSwap24Regular],
-  ['monitor', 'System monitor', DataUsage24Regular],
-  ['memory', 'Memory', Storage24Regular],
-  ['gpu', 'GPU', DeveloperBoard24Regular],
-  ['disk', 'Disk', HardDrive24Regular],
-  ['events', 'Firewall events', History24Regular],
-  ['policies', 'Policy center', ShieldTask24Regular],
-  ['rules', 'Managed rules', ShieldCheckmark24Regular],
+type NavItem = [PageId, string, React.FC];
+const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
+  { label: 'Home', items: [['overview', 'Overview', Home24Regular]] },
+  { label: 'Protection', items: [
+    ['processes', 'Processes & services', Desktop24Regular],
+    ['events', 'Firewall events', History24Regular],
+    ['policies', 'Policy center', ShieldTask24Regular],
+    ['rules', 'Managed rules', ShieldCheckmark24Regular],
+  ] },
+  { label: 'Network', items: [
+    ['connections', 'Network connections', Globe24Regular],
+    ['traffic', 'Traffic inspector', ArrowSwap24Regular],
+  ] },
+  { label: 'Performance', items: [
+    ['monitor', 'System monitor', DataUsage24Regular],
+    ['memory', 'Memory', Storage24Regular],
+    ['gpu', 'GPU', DeveloperBoard24Regular],
+    ['disk', 'Disk', HardDrive24Regular],
+  ] },
 ];
+const NAV = NAV_GROUPS.flatMap(group => group.items);
 
 const useStyles = makeStyles({
-  shell: { display: 'grid', gridTemplateColumns: '270px minmax(0, 1fr)', minHeight: '100vh', background: tokens.colorNeutralBackground2 },
-  sidebar: { position: 'sticky', top: 0, height: '100vh', display: 'flex', flexDirection: 'column', gap: tokens.spacingVerticalM, padding: `${tokens.spacingVerticalL} ${tokens.spacingHorizontalS}`, background: tokens.colorNeutralBackground1, borderRight: `1px solid ${tokens.colorNeutralStroke2}`, overflowY: 'auto' },
-  brand: { display: 'flex', alignItems: 'center', gap: '12px', padding: `${tokens.spacingVerticalXS} 10px` },
-  logo: { width: '42px', height: '42px', display: 'grid', placeItems: 'center', background: tokens.colorBrandBackground, color: tokens.colorNeutralForegroundOnBrand, borderRadius: tokens.borderRadiusXLarge },
-  brandSub: { fontSize: tokens.fontSizeBase100, color: tokens.colorNeutralForeground3, letterSpacing: '0.14em' },
-  navTabs: { display: 'flex', flexDirection: 'column', alignItems: 'stretch' },
-  navTab: { justifyContent: 'flex-start', alignItems: 'center' },
-  safety: { marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '8px', padding: tokens.spacingVerticalM, background: tokens.colorNeutralBackground3, borderRadius: tokens.borderRadiusLarge, border: `1px solid ${tokens.colorNeutralStroke2}` },
-  safetyHeading: { display: 'flex', alignItems: 'center', gap: '8px' },
-  foot: { fontSize: tokens.fontSizeBase100, color: tokens.colorNeutralForeground3, padding: '0 8px' },
-  main: { minWidth: 0, padding: `${tokens.spacingVerticalL} clamp(18px, 3vw, 42px) 44px`, maxWidth: '1800px', width: '100%', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: tokens.spacingVerticalL },
-  topbar: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px', paddingBottom: tokens.spacingVerticalM, borderBottom: `1px solid ${tokens.colorNeutralStroke2}` },
-  topActions: { display: 'flex', alignItems: 'center', gap: '8px' },
-  dryWrap: { display: 'flex', alignItems: 'center', gap: '8px' },
-  connectionBanner: { marginBottom: 0 },
+  shell: {
+    display: 'grid',
+    gridTemplateColumns: '280px minmax(0, 1fr)',
+    minHeight: '100vh',
+    background: tokens.colorNeutralBackground3,
+    '@media (max-width: 900px)': { gridTemplateColumns: '1fr' },
+  },
+  sidebar: {
+    position: 'sticky',
+    top: 0,
+    height: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '8px',
+    background: tokens.colorNeutralBackground2,
+    borderRight: `1px solid ${tokens.colorNeutralStroke2}`,
+    overflowY: 'auto',
+    '@media (max-width: 900px)': { position: 'relative', height: 'auto', borderRight: 'none', borderBottom: `1px solid ${tokens.colorNeutralStroke2}` },
+  },
+  brand: { display: 'flex', alignItems: 'center', gap: '10px', height: '48px', padding: '0 10px', flexShrink: 0 },
+  brandIcon: { display: 'grid', placeItems: 'center', width: '20px', height: '20px', color: tokens.colorBrandForeground1 },
+  nav: { display: 'flex', flexDirection: 'column', gap: '2px', paddingTop: '4px' },
+  groupLabel: { margin: '14px 12px 4px', fontSize: '12px', lineHeight: '16px', fontWeight: tokens.fontWeightSemibold, color: tokens.colorNeutralForeground3 },
+  navItem: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px',
+    width: '100%',
+    height: '36px',
+    padding: '0 10px',
+    border: 'none',
+    borderRadius: '4px',
+    background: 'transparent',
+    color: tokens.colorNeutralForeground1,
+    font: 'inherit',
+    fontSize: '14px',
+    lineHeight: '20px',
+    textAlign: 'left',
+    cursor: 'pointer',
+    ':hover': { background: tokens.colorNeutralBackground1Hover },
+    ':active': { background: tokens.colorNeutralBackground1Pressed },
+  },
+  navItemOn: { background: tokens.colorNeutralBackground1, fontWeight: tokens.fontWeightSemibold, ':hover': { background: tokens.colorNeutralBackground1 } },
+  navIcon: { display: 'grid', placeItems: 'center', width: '20px', height: '20px', flexShrink: 0, '& svg': { width: '20px', height: '20px' } },
+  safety: { marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '6px', padding: '12px 10px 4px' },
+  safetyRow: { display: 'flex', alignItems: 'center', gap: '8px' },
+  foot: { fontSize: '12px', lineHeight: '16px', color: tokens.colorNeutralForeground3, padding: '0 2px' },
+  main: { minWidth: 0, display: 'flex', flexDirection: 'column', minHeight: '100vh' },
+  command: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    gap: '8px',
+    minHeight: '48px',
+    padding: '0 24px',
+    position: 'sticky',
+    top: 0,
+    zIndex: 5,
+    background: tokens.colorNeutralBackground3,
+  },
+  dryWrap: { display: 'flex', alignItems: 'center', gap: '8px', height: '32px', padding: '0 8px', borderRadius: '4px', background: tokens.colorNeutralBackground1, border: `1px solid ${tokens.colorNeutralStroke2}` },
+  content: { padding: '8px 36px 48px', display: 'flex', flexDirection: 'column', gap: '16px', '@media (max-width: 720px)': { padding: '8px 16px 32px' } },
 });
 
-const PAGE_LABEL: Record<PageId, string> = Object.fromEntries(NAV.map(([id, label]) => [id, label])) as Record<PageId, string>;
 const THEME_LABEL: Record<ThemeMode, string> = { system: 'Match Windows', light: 'Light', dark: 'Dark' };
 
 export default function App() {
@@ -115,67 +169,68 @@ export default function App() {
     <div className={s.shell}>
       <aside className={s.sidebar}>
         <div className={s.brand}>
-          <div className={s.logo}><ShieldCheckmark24Regular /></div>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <Text weight="bold" size={400}>Firewall Guard</Text>
-            <span className={s.brandSub}>SECURITY CONSOLE</span>
-          </div>
+          <span className={s.brandIcon}><ShieldCheckmark24Regular /></span>
+          <Text weight="semibold" size={300}>Firewall Guard</Text>
         </div>
-        <div className={s.navTabs}>
-          <TabList vertical selectedValue={page} onTabSelect={(_, d) => setPage(d.value as PageId)} aria-label="Console navigation">
-            {NAV.map(([id, label, Icon]) => (
-              <Tab key={id} className={s.navTab} value={id} icon={<Icon />}>{label}</Tab>
-            ))}
-          </TabList>
-        </div>
+        <nav className={s.nav} aria-label="Console">
+          {NAV_GROUPS.map(group => (
+            <div key={group.label}>
+              <div className={s.groupLabel}>{group.label}</div>
+              {group.items.map(([id, label, Icon]) => (
+                <button
+                  key={id}
+                  type="button"
+                  className={mergeClasses(s.navItem, page === id && s.navItemOn)}
+                  aria-current={page === id ? 'page' : undefined}
+                  onClick={() => setPage(id)}
+                >
+                  <span className={s.navIcon}><Icon /></span>
+                  {label}
+                </button>
+              ))}
+            </div>
+          ))}
+        </nav>
         <div className={s.safety}>
-          <div className={s.safetyHeading}>
-            <Text weight="semibold">Enforcement</Text>
-            <Badge appearance="filled" color={dryMode ? 'warning' : 'success'}>{dryMode ? 'DRY RUN' : 'LIVE'}</Badge>
+          <div className={s.safetyRow}>
+            <Badge appearance="tint" color={dryMode ? 'warning' : 'success'}>{dryMode ? 'Dry-run' : 'Live'}</Badge>
+            <Text size={200}>{dryMode ? 'No firewall changes' : 'Rules require UAC'}</Text>
           </div>
-          <Text size={100} style={{ color: tokens.colorNeutralForeground2 }}>
-            Outbound block rules are created through Windows Defender Firewall. Live changes require UAC approval.
-          </Text>
-          <Button appearance="subtle" size="small" icon={<Settings24Regular />} onClick={() => setShowHelp(true)}>Safety & help</Button>
+          <Button appearance="subtle" size="small" icon={<Settings24Regular />} onClick={() => setShowHelp(true)}>Safety and help</Button>
+          <div className={s.foot}>This PC · 127.0.0.1:8765</div>
         </div>
-        <div className={s.foot}>Local-only console · 127.0.0.1 : 8765</div>
       </aside>
 
       <main className={s.main}>
-        <header className={s.topbar}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Text size={100} weight="semibold" style={{ color: tokens.colorNeutralForeground3, letterSpacing: '0.1em' }}>SECURITY CENTER / {(PAGE_LABEL[page] || page).toUpperCase()}</Text>
-            <Text size={600} weight="semibold">{PAGE_LABEL[page] || page}</Text>
-          </div>
-          <div className={s.topActions}>
-            {connectionLost && <Badge appearance="outline" color="danger">API unreachable</Badge>}
-            <span className={s.dryWrap}>
-              <Text size={200}>{dryMode ? 'Dry-run' : 'Live changes'}</Text>
-              <Switch checked={dryMode} onChange={(_, d) => { if (!d.checked && !window.confirm('Enable live firewall enforcement? Future apply actions change Windows Defender Firewall after UAC approval.')) return; void setDryMode(d.checked); }} />
-            </span>
-            <Tooltip content="Refresh everything" relationship="label">
-              <Button appearance="secondary" icon={<ArrowSync24Regular />} aria-label="Refresh" onClick={() => { void qc.invalidateQueries(); }} />
-            </Tooltip>
-            <Menu>
-              <MenuTrigger disableButtonEnhancement>
-                <Tooltip content="Theme" relationship="label">
-                  <Button appearance="subtle" aria-label="Theme" icon={themeCtl.mode === 'dark' ? <WeatherMoon24Regular /> : themeCtl.mode === 'light' ? <WeatherSunny24Regular /> : <WeatherPartlyCloudyDay24Regular />} />
-                </Tooltip>
-              </MenuTrigger>
-              <MenuPopover>
-                <MenuList>
-                  {(['system', 'light', 'dark'] as ThemeMode[]).map(m => (
-                    <MenuItem key={m} icon={themeCtl.mode === m ? <Checkmark24Regular /> : undefined} onClick={() => themeCtl.setMode(m)}>{THEME_LABEL[m]}</MenuItem>
-                  ))}
-                </MenuList>
-              </MenuPopover>
-            </Menu>
-          </div>
+        <header className={s.command}>
+          {connectionLost && <Badge appearance="outline" color="danger">API unreachable</Badge>}
+          <span className={s.dryWrap}>
+            <Text size={200}>Dry-run</Text>
+            <Switch checked={dryMode} onChange={(_, d) => { if (!d.checked && !window.confirm('Enable live firewall enforcement? Future apply actions change Windows Defender Firewall after UAC approval.')) return; void setDryMode(d.checked); }} />
+          </span>
+          <Tooltip content="Refresh" relationship="label">
+            <Button appearance="subtle" icon={<ArrowSync24Regular />} aria-label="Refresh" onClick={() => { void qc.invalidateQueries(); }} />
+          </Tooltip>
+          <Menu>
+            <MenuTrigger disableButtonEnhancement>
+              <Tooltip content="Theme" relationship="label">
+                <Button appearance="subtle" aria-label="Theme" icon={themeCtl.mode === 'dark' ? <WeatherMoon24Regular /> : themeCtl.mode === 'light' ? <WeatherSunny24Regular /> : <WeatherPartlyCloudyDay24Regular />} />
+              </Tooltip>
+            </MenuTrigger>
+            <MenuPopover>
+              <MenuList>
+                {(['system', 'light', 'dark'] as ThemeMode[]).map(m => (
+                  <MenuItem key={m} icon={themeCtl.mode === m ? <Checkmark24Regular /> : undefined} onClick={() => themeCtl.setMode(m)}>{THEME_LABEL[m]}</MenuItem>
+                ))}
+              </MenuList>
+            </MenuPopover>
+          </Menu>
         </header>
 
+        <div className={s.content}>
         {connectionLost && (
-          <MessageBar intent="error" className={s.connectionBanner}>
-            <MessageBarBody>Cannot reach the local API at 127.0.0.1:8765. Start the app with "Start Firewall Guard.bat" (or scripts\start.bat) — values will update once it responds.</MessageBarBody>
+          <MessageBar intent="error">
+            <MessageBarBody>Cannot reach the local API at 127.0.0.1:8765. Start the app with Start Firewall Guard.bat. Values update once it responds.</MessageBarBody>
           </MessageBar>
         )}
         {dryMode === null && !overview.isError && <Spinner size="tiny" label="Restoring enforcement state…" />}
@@ -191,6 +246,7 @@ export default function App() {
         {page === 'events' && <EventsPage />}
         {page === 'policies' && <PoliciesPage />}
         {page === 'rules' && <RulesPage />}
+        </div>
       </main>
 
       <BlockDialog

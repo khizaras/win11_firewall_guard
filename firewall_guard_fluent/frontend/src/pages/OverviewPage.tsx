@@ -12,18 +12,17 @@ import { LiveChart, useLiveSamples } from '../components/LiveChart';
 import { Metric, PageIntro, Panel, Secondary, fmtBytes, fmtRate, MeterRow } from '../components/ui';
 
 const useStyles = makeStyles({
-  grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: tokens.spacingVerticalS },
-  dash: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: tokens.spacingVerticalL, alignItems: 'start' },
-  hero: { display: 'flex', alignItems: 'center', gap: '16px', padding: `${tokens.spacingVerticalL} ${tokens.spacingHorizontalL}`, borderRadius: tokens.borderRadiusXLarge, border: `1px solid ${tokens.colorNeutralStroke2}`, background: `linear-gradient(112deg, ${tokens.colorBrandBackground2} 0%, ${tokens.colorNeutralBackground1} 70%)`, marginBottom: tokens.spacingVerticalL },
-  heroGlyph: { display: 'grid', placeItems: 'center', width: '56px', height: '56px', borderRadius: tokens.borderRadiusLarge, background: tokens.colorBrandBackground, color: tokens.colorNeutralForegroundOnBrand, flexShrink: 0 },
-  heroText: { flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '4px' },
-  heroSwitch: { display: 'flex', flexDirection: 'column', gap: '4px', paddingLeft: '16px', borderLeft: `1px solid ${tokens.colorNeutralStroke2}`, minWidth: '170px' },
-  profileRow: { display: 'flex', gap: tokens.spacingVerticalS, flexWrap: 'wrap' as const },
-  profileCard: { flex: '1 1 200px', padding: `${tokens.spacingVerticalM} ${tokens.spacingHorizontalM}`, border: `1px solid ${tokens.colorNeutralStroke2}`, borderRadius: tokens.borderRadiusMedium, display: 'flex', flexDirection: 'column', gap: '6px' },
-  activityRow: { display: 'flex', gap: '10px', padding: '9px 0', borderBottom: `1px solid ${tokens.colorNeutralStroke2}` },
-  activityDot: { width: '8px', height: '8px', borderRadius: '50%', background: tokens.colorBrandForeground1, marginTop: '7px', flexShrink: 0 },
-  chartRow: { display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' },
-  chartLabel: { minWidth: '120px', fontSize: tokens.fontSizeBase200, color: tokens.colorNeutralForeground2 },
+  grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' },
+  dash: { display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '12px', alignItems: 'start', '@media (max-width: 980px)': { gridTemplateColumns: '1fr' } },
+  hero: { display: 'flex', alignItems: 'center', gap: '16px', padding: '16px', borderRadius: '8px', border: `1px solid ${tokens.colorNeutralStroke2}`, background: tokens.colorNeutralBackground1 },
+  heroGlyph: { display: 'grid', placeItems: 'center', width: '48px', height: '48px', flexShrink: 0 },
+  heroText: { flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '2px' },
+  heroSwitch: { display: 'flex', alignItems: 'center', gap: '8px', paddingLeft: '16px', borderLeft: `1px solid ${tokens.colorNeutralStroke2}`, minWidth: '150px' },
+  profileRow: { display: 'flex', gap: '8px', flexWrap: 'wrap' as const },
+  profileCard: { flex: '1 1 180px', padding: '12px', border: `1px solid ${tokens.colorNeutralStroke2}`, borderRadius: '4px', display: 'flex', flexDirection: 'column', gap: '6px', background: tokens.colorNeutralBackground1 },
+  activityRow: { display: 'flex', gap: '10px', padding: '10px 0', borderBottom: `1px solid ${tokens.colorNeutralStroke2}` },
+  activityDot: { width: '8px', height: '8px', borderRadius: '4px', background: tokens.colorBrandForeground1, marginTop: '6px', flexShrink: 0 },
+  chartLabel: { fontSize: '12px', color: tokens.colorNeutralForeground2 },
 });
 
 export function OverviewPage({ onNavigate, onDryToggle, dry }: { onNavigate: (page: string) => void; onDryToggle: (v: boolean) => void; dry: boolean }) {
@@ -53,38 +52,36 @@ export function OverviewPage({ onNavigate, onDryToggle, dry }: { onNavigate: (pa
   return (
     <>
       <PageIntro
-        eyebrow="Live security overview"
-        title="Know where your PC is connecting."
-        desc="Live view of network exposure, system pressure, active Windows Firewall protection, and your managed outbound controls."
-        action={<Button appearance="primary" icon={<ArrowRight24Regular />} onClick={() => onNavigate('processes')}>Inspect services</Button>}
+        title="Overview"
+        desc="Network exposure, system pressure, Windows Firewall profiles, and the outbound rules this app manages."
+        action={<Button appearance="primary" onClick={() => onNavigate('processes')}>Inspect services</Button>}
       />
 
       <div className={s.hero}>
-        <div className={s.heroGlyph}><ShieldCheckmark24Regular /></div>
+        <div className={s.heroGlyph} style={{ color: dry ? tokens.colorPaletteMarigoldForeground1 : tokens.colorPaletteGreenForeground1 }}>
+          <ShieldCheckmark24Regular style={{ width: 40, height: 40 }} />
+        </div>
         <div className={s.heroText}>
-          <Text weight="semibold" size={500}>{dry ? 'Observe first. Block with confidence.' : 'Outbound protection is in live mode.'}</Text>
-          <Text size={200} style={{ color: tokens.colorNeutralForeground2 }}>
-            {dry ? 'Dry-run records your intent without changing Windows Firewall. Turn off dry-run to apply real block rules.' : 'New block and unblock actions change Windows Defender Firewall after administrator approval.'}
+          <Text weight="semibold" size={500}>{dry ? 'Dry-run is on' : 'Live enforcement is on'}</Text>
+          <Text size={300} style={{ color: tokens.colorNeutralForeground2 }}>
+            {dry ? 'Actions are recorded and Windows Firewall is left unchanged. Turn dry-run off to apply block rules.' : 'Block and unblock actions change Windows Defender Firewall after you approve the UAC prompt.'}
           </Text>
         </div>
         <div className={s.heroSwitch}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Text weight="semibold">Dry-run</Text>
-            <Switch checked={dry} onChange={(_, d) => { if (!d.checked && !window.confirm('Enable live firewall enforcement? Future apply actions change Windows Defender Firewall after UAC approval.')) return; onDryToggle(d.checked); }} />
-          </div>
-          <Badge appearance="filled" color={dry ? 'warning' : 'success'}>{dry ? 'SAFE PREVIEW' : 'LIVE ENFORCEMENT'}</Badge>
+          <Text weight="semibold">Dry-run</Text>
+          <Switch checked={dry} onChange={(_, d) => { if (!d.checked && !window.confirm('Enable live firewall enforcement? Future apply actions change Windows Defender Firewall after UAC approval.')) return; onDryToggle(d.checked); }} />
         </div>
       </div>
 
-      <div className={s.grid} style={{ marginBottom: tokens.spacingVerticalM }}>
-        <Metric label="Remote connections" value={overview.data?.connection_count ?? '—'} detail={`${overview.data?.process_count ?? '—'} processes observed`} icon={<Globe24Regular />} />
-        <Metric label="Managed block rules" value={overview.data?.managed_rules ?? 'â€”'} detail={`${activeRules} recorded active`} icon={<ShieldCheckmark24Regular />} />
-        <Metric label="Network throughput" value={<span>â†“ {fmtRate(m?.net_recv_bytes_per_sec)} Â· â†‘ {fmtRate(m?.net_sent_bytes_per_sec)}</span>} detail="received / sent across all interfaces" icon={<Wifi124Regular />} tone="brand" />
-        <Metric label="Disk writes" value={fmtRate(m?.disk_write_bytes_per_sec)} detail="system-wide current write rate" icon={<HardDrive24Regular />} tone="orange" />
+      <div className={s.grid}>
+        <Metric label="Remote connections" value={overview.data?.connection_count ?? '—'} detail={`${overview.data?.process_count ?? '—'} processes observed`} icon={<Globe24Regular />} onClick={() => onNavigate('connections')} />
+        <Metric label="Managed block rules" value={overview.data?.managed_rules ?? '—'} detail={`${activeRules} recorded active`} icon={<ShieldCheckmark24Regular />} onClick={() => onNavigate('rules')} />
+        <Metric label="Network in" value={fmtRate(m?.net_recv_bytes_per_sec)} detail={`${fmtRate(m?.net_sent_bytes_per_sec)} sent`} icon={<Wifi124Regular />} onClick={() => onNavigate('monitor')} />
+        <Metric label="Disk writes" value={fmtRate(m?.disk_write_bytes_per_sec)} detail="Current write rate on this PC" icon={<HardDrive24Regular />} onClick={() => onNavigate('disk')} />
       </div>
 
       <div className={s.dash}>
-        <Panel title="System health" subtitle="Refreshes every 3 seconds" action={<Button appearance="subtle" size="small" onClick={() => onNavigate('monitor')}>Open monitor<span style={{ marginLeft: '6px' }}><ArrowRight24Regular /></span></Button>}>
+        <Panel title="System health" subtitle="Refreshes every 3 seconds" action={<Button appearance="subtle" size="small" icon={<ArrowRight24Regular />} iconPosition="after" onClick={() => onNavigate('monitor')}>Open monitor</Button>}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <MeterRow label="CPU utilization" valueText={`${cpu.toFixed(1)}%`} fraction={cpu / 100} tone={cpu > 85 ? 'error' : 'brand'} />
             <MeterRow label="Memory used" valueText={`${ram.toFixed(1)}%`} fraction={ram / 100} tone={ram > 90 ? 'error' : 'brand'} />
@@ -109,7 +106,7 @@ export function OverviewPage({ onNavigate, onDryToggle, dry }: { onNavigate: (pa
                   <Text weight="semibold">{p.profile}</Text>
                   <Badge appearance="filled" color={p.enabled === 'True' ? 'success' : 'warning'}>{p.enabled === 'True' ? 'Active' : 'Disabled'}</Badge>
                 </div>
-                <Text size={200} style={{ color: tokens.colorNeutralForeground2 }}>Inbound: {p.default_inbound_action || '—'} · Outbound: {p.default_outbound_action || '—'}</Text>
+                <Text size={200} style={{ color: tokens.colorNeutralForeground2 }}>Inbound {p.default_inbound_action || '—'} · Outbound {p.default_outbound_action || '—'}</Text>
               </div>
             ))}
             {!profiles.length && <MessageBar intent="info"><MessageBarBody>Profile state is not available on this platform.</MessageBarBody></MessageBar>}
@@ -137,7 +134,7 @@ export function OverviewPage({ onNavigate, onDryToggle, dry }: { onNavigate: (pa
               <span className={s.activityDot} />
               <div style={{ minWidth: 0 }}>
                 <div>{a.summary}</div>
-                <Secondary>{a.category} Â· {new Date(a.time).toLocaleString()}</Secondary>
+                <Secondary>{a.category} · {new Date(a.time).toLocaleString()}</Secondary>
               </div>
             </div>
           ))}
@@ -148,7 +145,7 @@ export function OverviewPage({ onNavigate, onDryToggle, dry }: { onNavigate: (pa
       {m && (m.top_disk || []).some(p => (p.write_bytes_per_sec || 0) > 5 * 1024 * 1024) && (
         <MessageBar intent="warning" style={{ marginTop: tokens.spacingVerticalM }}>
           <MessageBarBody>
-            {(m.top_disk || []).filter(p => (p.write_bytes_per_sec || 0) > 5 * 1024 * 1024).length} process(es) write faster than 5 MB/s right now â€” review the System monitor. High writes alone do not prove data exfiltration.
+            {(m.top_disk || []).filter(p => (p.write_bytes_per_sec || 0) > 5 * 1024 * 1024).length} processes are writing faster than 5 MB/s. Open System monitor to see which ones. High writes alone do not show what was sent.
           </MessageBarBody>
         </MessageBar>
       )}

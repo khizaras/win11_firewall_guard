@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Specifications — Firewall Guard</title>
+  <meta name="description" content="Requirements, architecture, and firewall rule limits for Firewall Guard.">
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to content</a>
+  <header class="global">
+    <a class="wordmark" href="index.html">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="#fff" d="M8 1.2 2.2 3.2v4.2c0 3.1 2.1 6 5.8 6.9 3.7-.9 5.8-3.8 5.8-6.9V3.2L8 1.2Z"/></svg>
+      Firewall Guard
+    </a>
+    <button class="menu" type="button" aria-expanded="false">Menu</button>
+    <nav aria-label="Site">
+      <a href="index.html">Overview</a>
+      <a href="features.html">Features</a>
+      <a href="specifications.html">Specifications</a>
+      <a href="operations.html">Operations</a>
+    </nav>
+  </header>
+  <div class="productbar">
+    <strong>Firewall Guard</strong>
+    <div class="links">
+      <a href="index.html">Overview</a>
+      <a href="features.html">Features</a>
+      <a href="specifications.html" aria-current="page">Specifications</a>
+      <a href="operations.html">Operations</a>
+      <a class="cta" href="operations.html">How to run it</a>
+    </div>
+  </div>
+
+  <main id="content">
+    <section class="hero" style="min-height:auto; padding-bottom:40px">
+      <h1 class="reveal">Built for one PC.</h1>
+      <p class="fine reveal">The browser talks to a local API. Windows Firewall changes only after you approve an elevated PowerShell broker.</p>
+    </section>
+
+    <section class="chapter" style="padding-top:20px">
+      <div class="specgrid reveal">
+        <div><dt>System</dt><dd>Windows 11. Windows 10 can run with reduced PowerShell behavior.</dd></div>
+        <div><dt>Python</dt><dd>3.11 or newer, for the local API.</dd></div>
+        <div><dt>Node.js</dt><dd>20 or newer, only to install or rebuild the dashboard.</dd></div>
+        <div><dt>Rights</dt><dd>Observation does not need elevation. Live rules need one UAC approval per batch.</dd></div>
+        <div><dt>Network</dt><dd>API bound to 127.0.0.1, port 8765. Dashboard dev server on port 5173.</dd></div>
+        <div><dt>Dashboard</dt><dd>React 18 and Fluent UI v9.</dd></div>
+        <div><dt>Action</dt><dd>Block only. No allow rules are created.</dd></div>
+        <div><dt>Direction</dt><dd>Outbound for the managed workflow.</dd></div>
+        <div><dt>Name</dt><dd>Prefix <code>FGF-</code>. Group Firewall Guard Fluent.</dd></div>
+        <div><dt>Batch</dt><dd>Up to 50 targets. One elevation. A result for each item.</dd></div>
+        <div><dt>Removal</dt><dd>Only rules this console created. Other products are left in place.</dd></div>
+        <div><dt>Check</dt><dd>Create and delete are verified with Get-NetFirewallRule.</dd></div>
+        <div><dt>Sessions</dt><dd>A new block does not always cut a connection that is already open.</dd></div>
+        <div><dt>Metrics</dt><dd>About every 3 seconds for CPU, memory, network, and disk.</dd></div>
+        <div><dt>GPU</dt><dd>About every 4 seconds. nvidia-smi when present, otherwise Windows GPU counters.</dd></div>
+        <div><dt>Domains</dt><dd>Optional elevated refresh about every 5 minutes.</dd></div>
+        <div><dt>Policies</dt><dd><code>policies.json</code> is a catalog. It is not a background enforcer.</dd></div>
+        <div><dt>End process</dt><dd>Confirmation required. Critical Windows processes and this console cannot be ended.</dd></div>
+      </div>
+    </section>
+
+    <section class="chapter stage">
+      <div class="center narrow reveal">
+        <h2 class="display">What it will not claim.</h2>
+        <p class="lede">High disk writes and a new connection are clues. They are not the contents of a transfer. Group Policy, a VPN, or another security product can still allow or block the same path.</p>
+      </div>
+    </section>
+  </main>
+  <footer class="foot">
+    <span>Not a signed commercial product. Review the source before you rely on it.</span>
+    <a href="operations.html">Operations</a>
+  </footer>
+  <script src="site.js"></script>
+</body>
+</html>

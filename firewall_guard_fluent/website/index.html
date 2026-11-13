@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Firewall Guard</title>
+  <meta name="description" content="Firewall Guard is a local Windows console for outbound firewall control, traffic investigation, and hardware monitoring.">
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to content</a>
+  <header class="global">
+    <a class="wordmark" href="index.html">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="#fff" d="M8 1.2 2.2 3.2v4.2c0 3.1 2.1 6 5.8 6.9 3.7-.9 5.8-3.8 5.8-6.9V3.2L8 1.2Z"/></svg>
+      Firewall Guard
+    </a>
+    <button class="menu" type="button" aria-expanded="false">Menu</button>
+    <nav aria-label="Site">
+      <a href="index.html">Overview</a>
+      <a href="features.html">Features</a>
+      <a href="specifications.html">Specifications</a>
+      <a href="operations.html">Operations</a>
+    </nav>
+  </header>
+  <div class="productbar">
+    <strong>Firewall Guard</strong>
+    <div class="links">
+      <a href="index.html" aria-current="page">Overview</a>
+      <a href="features.html">Features</a>
+      <a href="specifications.html">Specifications</a>
+      <a href="operations.html">Operations</a>
+      <a class="cta" href="operations.html">How to run it</a>
+    </div>
+  </div>
+
+  <main id="content">
+    <section class="hero">
+      <h1 class="reveal">Firewall Guard.</h1>
+      <p class="sub reveal">Outbound control for this PC.</p>
+      <p class="fine reveal">Block a service, a program, or a remote address. Then see the process, the traffic, and the hardware behind that decision.</p>
+      <div class="hero-links reveal">
+        <a href="features.html">Explore the features</a>
+        <a href="specifications.html">See the specifications</a>
+      </div>
+      <div class="hero-art float" aria-hidden="true">
+        <svg class="console" viewBox="0 0 980 560">
+          <defs>
+            <filter id="sh" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#000" flood-opacity="0.16"/></filter>
+          </defs>
+          <rect x="40" y="20" width="900" height="500" rx="22" fill="#fff" filter="url(#sh)"/>
+          <rect x="40" y="20" width="210" height="500" rx="22" fill="#f5f5f7"/>
+          <rect x="228" y="20" width="22" height="500" fill="#f5f5f7"/>
+          <text x="64" y="58" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="15" font-weight="650">Firewall Guard</text>
+          <rect x="56" y="82" width="168" height="32" rx="8" fill="#fff"/>
+          <text x="72" y="103" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="13">Overview</text>
+          <text x="72" y="142" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">Processes</text>
+          <text x="72" y="172" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">Connections</text>
+          <text x="72" y="202" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">Traffic</text>
+          <text x="72" y="248" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">Memory</text>
+          <text x="72" y="278" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">GPU</text>
+          <text x="72" y="308" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">Disk</text>
+          <text x="268" y="64" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="26" font-weight="650">Overview</text>
+          <text x="268" y="90" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">Dry-run is on. Windows Firewall is unchanged.</text>
+          <rect x="268" y="116" width="200" height="92" rx="16" fill="#f5f5f7"/>
+          <text x="286" y="148" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="12">Connections</text>
+          <text x="286" y="180" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="28" font-weight="650">128</text>
+          <rect x="484" y="116" width="200" height="92" rx="16" fill="#f5f5f7"/>
+          <text x="502" y="148" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="12">Block rules</text>
+          <text x="502" y="180" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="28" font-weight="650">24</text>
+          <rect x="700" y="116" width="200" height="92" rx="16" fill="#f5f5f7"/>
+          <text x="718" y="148" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="12">Memory</text>
+          <text x="718" y="180" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="28" font-weight="650">61%</text>
+          <rect x="268" y="228" width="632" height="250" rx="16" fill="#fbfbfd"/>
+          <path d="M290 400 C 360 390, 400 300, 470 310 S 560 360, 640 280 760 250 860 220" fill="none" stroke="#0071e3" stroke-width="3"/>
+          <path d="M290 410 C 380 400, 430 360, 520 350 S 650 390, 760 340 840 360 870 330" fill="none" stroke="#30b04a" stroke-width="3"/>
+          <text x="290" y="258" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="14" font-weight="650">Last two minutes</text>
+        </svg>
+      </div>
+    </section>
+
+    <section class="scrub" data-scrub>
+      <div class="scrub-sticky">
+        <div>
+          <p class="kicker">How a block works</p>
+          <h2 data-title>Select the rows.</h2>
+          <p class="detail" data-detail>Services, programs, and remote addresses can share one batch. The console groups them before anything is sent.</p>
+          <div class="steps-inline" role="tablist" aria-label="Block sequence">
+            <button type="button" data-go="0" aria-current="true" aria-label="Select the rows"></button>
+            <button type="button" data-go="1" aria-label="Confirm the batch"></button>
+            <button type="button" data-go="2" aria-label="Approve once"></button>
+            <button type="button" data-go="3" aria-label="Each rule is verified"></button>
+          </div>
+        </div>
+        <div class="stage-card" data-step="0" aria-hidden="true">
+          <svg class="console" viewBox="0 0 640 420">
+            <rect width="640" height="420" rx="18" fill="#0c0c0e"/>
+            <text x="28" y="42" fill="#f5f5f7" font-family="Segoe UI, sans-serif" font-size="16" font-weight="650">Batch</text>
+            <g class="layer s0">
+              <rect x="28" y="68" width="584" height="64" rx="12" fill="#1c1c1e"/>
+              <rect x="48" y="90" width="18" height="18" rx="4" fill="#0071e3"/>
+              <text x="84" y="106" fill="#f5f5f7" font-family="Segoe UI, sans-serif" font-size="15">wuauserv</text>
+              <text x="430" y="106" fill="#a1a1a6" font-family="Segoe UI, sans-serif" font-size="13">Service</text>
+              <rect x="28" y="144" width="584" height="64" rx="12" fill="#1c1c1e"/>
+              <rect x="48" y="166" width="18" height="18" rx="4" fill="#0071e3"/>
+              <text x="84" y="182" fill="#f5f5f7" font-family="Segoe UI, sans-serif" font-size="15">updater.exe</text>
+              <text x="430" y="182" fill="#a1a1a6" font-family="Segoe UI, sans-serif" font-size="13">Program</text>
+              <rect x="28" y="220" width="584" height="64" rx="12" fill="#1c1c1e"/>
+              <rect x="48" y="242" width="18" height="18" rx="4" fill="#0071e3"/>
+              <text x="84" y="258" fill="#f5f5f7" font-family="Segoe UI, sans-serif" font-size="15">203.0.113.44</text>
+              <text x="430" y="258" fill="#a1a1a6" font-family="Segoe UI, sans-serif" font-size="13">Address</text>
+              <rect x="28" y="320" width="160" height="40" rx="980" fill="#0071e3"/>
+              <text x="52" y="346" fill="#fff" font-family="Segoe UI, sans-serif" font-size="14">Block 3 selected</text>
+            </g>
+            <g class="layer s1">
+              <rect x="70" y="70" width="500" height="280" rx="18" fill="#1d1d1f" stroke="#3a3a3c"/>
+              <text x="98" y="118" fill="#f5f5f7" font-family="Segoe UI, sans-serif" font-size="22" font-weight="650">Block 3 targets?</text>
+              <text x="98" y="156" fill="#a1a1a6" font-family="Segoe UI, sans-serif" font-size="14">1 service, 1 program, 1 address</text>
+              <text x="98" y="196" fill="#d2d2d7" font-family="Segoe UI, sans-serif" font-size="15">Dry-run will log this and change nothing.</text>
+              <rect x="98" y="250" width="120" height="40" rx="980" fill="#3a3a3c"/>
+              <text x="128" y="276" fill="#fff" font-family="Segoe UI, sans-serif" font-size="14">Cancel</text>
+              <rect x="232" y="250" width="140" height="40" rx="980" fill="#0071e3"/>
+              <text x="268" y="276" fill="#fff" font-family="Segoe UI, sans-serif" font-size="14">Continue</text>
+            </g>
+            <g class="layer s2">
+              <rect x="120" y="80" width="400" height="250" rx="16" fill="#f5f5f7"/>
+              <text x="148" y="130" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="18" font-weight="650">Windows needs approval</text>
+              <text x="148" y="168" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="14">One prompt covers this entire batch.</text>
+              <rect x="148" y="220" width="150" height="40" rx="8" fill="#0071e3"/>
+              <text x="186" y="246" fill="#fff" font-family="Segoe UI, sans-serif" font-size="14">Approve</text>
+            </g>
+            <g class="layer s3">
+              <text x="28" y="78" fill="#a1a1a6" font-family="Segoe UI, sans-serif" font-size="13">FGF- rules</text>
+              <rect x="28" y="98" width="584" height="58" rx="12" fill="#1c1c1e"/>
+              <text x="48" y="133" fill="#f5f5f7" font-family="ui-monospace, monospace" font-size="14">FGF-svc-wuauserv</text>
+              <rect x="470" y="114" width="110" height="26" rx="8" fill="#16381c"/>
+              <text x="492" y="132" fill="#6bdc7a" font-family="Segoe UI, sans-serif" font-size="13">Verified</text>
+              <rect x="28" y="168" width="584" height="58" rx="12" fill="#1c1c1e"/>
+              <text x="48" y="203" fill="#f5f5f7" font-family="ui-monospace, monospace" font-size="14">FGF-app-updater</text>
+              <rect x="470" y="184" width="110" height="26" rx="8" fill="#16381c"/>
+              <text x="492" y="202" fill="#6bdc7a" font-family="Segoe UI, sans-serif" font-size="13">Verified</text>
+              <rect x="28" y="238" width="584" height="58" rx="12" fill="#1c1c1e"/>
+              <text x="48" y="273" fill="#f5f5f7" font-family="ui-monospace, monospace" font-size="14">FGF-ip-203.0.113.44</text>
+              <rect x="470" y="254" width="110" height="26" rx="8" fill="#16381c"/>
+              <text x="492" y="272" fill="#6bdc7a" font-family="Segoe UI, sans-serif" font-size="13">Verified</text>
+              <text x="28" y="350" fill="#a1a1a6" font-family="Segoe UI, sans-serif" font-size="14">Checked with Get-NetFirewallRule. Logged on this PC.</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter stage">
+      <div class="center narrow reveal">
+        <h2 class="display">The machine, in three pages.</h2>
+        <p class="lede">Memory, GPU, and disk each have a page. Used, available, and free. Then the applications holding that resource.</p>
+      </div>
+      <div class="tiles wide">
+        <article class="tile reveal">
+          <h3>Memory.</h3>
+          <p>Working set, standby Windows can reclaim, and memory that is actually free.</p>
+          <svg class="art" viewBox="0 0 280 180" aria-hidden="true">
+            <circle cx="90" cy="96" r="58" fill="none" stroke="#e8e8ed" stroke-width="16"/>
+            <circle cx="90" cy="96" r="58" fill="none" stroke="#0071e3" stroke-width="16" stroke-dasharray="250 364" stroke-linecap="round" transform="rotate(-90 90 96)"/>
+            <text x="168" y="78" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">Used</text>
+            <text x="168" y="106" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="28" font-weight="650">58 GB</text>
+            <text x="168" y="132" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">3.4 GB free</text>
+          </svg>
+        </article>
+        <article class="tile reveal">
+          <h3>GPU.</h3>
+          <p>Engine use and dedicated memory. NVIDIA totals when the driver is there. Windows counters for each app.</p>
+          <svg class="art" viewBox="0 0 280 180" aria-hidden="true">
+            <rect x="36" y="48" width="150" height="100" rx="16" fill="#1d1d1f"/>
+            <rect x="52" y="64" width="118" height="46" rx="8" fill="#2c2c2e"/>
+            <rect x="60" y="74" width="70" height="8" rx="4" fill="#0071e3"/>
+            <text x="60" y="128" fill="#f5f5f7" font-family="Segoe UI, sans-serif" font-size="13">96% engine</text>
+            <text x="200" y="90" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="22" font-weight="650">26 GB</text>
+            <text x="200" y="112" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="12">in use</text>
+          </svg>
+        </article>
+        <article class="tile reveal">
+          <h3>Disk.</h3>
+          <p>Free space on each volume, then the processes reading and writing. Ending one closes the app. It does not delete files.</p>
+          <svg class="art" viewBox="0 0 280 180" aria-hidden="true">
+            <text x="24" y="58" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="14" font-weight="650">C:</text>
+            <rect x="24" y="70" width="230" height="14" rx="7" fill="#e8e8ed"/>
+            <rect x="24" y="70" width="150" height="14" rx="7" fill="#0071e3"/>
+            <text x="24" y="112" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">Read 19 MB/s</text>
+            <text x="140" y="112" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">Write 1.1 MB/s</text>
+            <rect x="24" y="128" width="230" height="28" rx="8" fill="#f5f5f7"/>
+            <text x="36" y="147" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="13">python.exe</text>
+          </svg>
+        </article>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <div class="pair">
+        <div class="copy reveal">
+          <h2>Traffic, with a name beside it.</h2>
+          <p>Live firewall events sit next to current sockets. A remote name comes from the Windows DNS cache. The console does not look inside TLS.</p>
+          <p>A pattern such as <code>*microsoft.com*</code> resolves to addresses, and those addresses become block rules.</p>
+        </div>
+        <div class="frame reveal" aria-hidden="true">
+          <svg viewBox="0 0 520 340">
+            <rect width="520" height="340" rx="8" fill="#f5f5f7"/>
+            <circle cx="90" cy="170" r="36" fill="#fff"/>
+            <text x="74" y="176" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="13" font-weight="650">PC</text>
+            <path d="M130 170 C 200 80, 280 80, 360 150" fill="none" stroke="#0071e3" stroke-width="2"/>
+            <path d="M130 176 C 210 240, 300 250, 370 190" fill="none" stroke="#86868b" stroke-width="2"/>
+            <circle cx="390" cy="146" r="28" fill="#fff"/>
+            <text x="372" y="151" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="11">edge</text>
+            <rect x="300" y="210" width="180" height="70" rx="14" fill="#fff"/>
+            <text x="316" y="240" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="13" font-weight="650">update.example</text>
+            <text x="316" y="260" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="12">from the DNS cache</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter black">
+      <div class="center narrow reveal">
+        <h2 class="display">Dry-run first.</h2>
+        <p class="lede">The default records what you meant to block. Windows Firewall stays as it is until you turn live mode on and approve the prompt.</p>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <div class="center narrow reveal">
+        <h2 class="display">Get the highlights.</h2>
+      </div>
+      <div class="hscroll-wrap">
+        <div class="hscroll">
+          <article class="card">
+            <h3>Processes and services.</h3>
+            <p>Status, start mode, path, and a detail drawer with signer and command line when Windows can provide them.</p>
+            <svg class="art" viewBox="0 0 300 140" aria-hidden="true">
+              <rect x="0" y="10" width="280" height="28" rx="6" fill="#fff"/>
+              <rect x="0" y="46" width="280" height="28" rx="6" fill="#fff"/>
+              <rect x="0" y="82" width="280" height="28" rx="6" fill="#fff"/>
+              <circle cx="16" cy="24" r="5" fill="#30b04a"/>
+              <circle cx="16" cy="60" r="5" fill="#86868b"/>
+              <circle cx="16" cy="96" r="5" fill="#30b04a"/>
+              <text x="32" y="28" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="12">WinDefend</text>
+              <text x="32" y="64" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="12">wuauserv</text>
+              <text x="32" y="100" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="12">DiagTrack</text>
+            </svg>
+          </article>
+          <article class="card">
+            <h3>One table language.</h3>
+            <p>Sort any column. Filter each column. Open a row for the details. The same behavior on every page.</p>
+            <svg class="art" viewBox="0 0 300 140" aria-hidden="true">
+              <rect width="280" height="120" rx="12" fill="#fff"/>
+              <text x="16" y="28" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="11">Application</text>
+              <text x="150" y="28" fill="#0071e3" font-family="Segoe UI, sans-serif" font-size="11">Working set</text>
+              <text x="16" y="58" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="13">python.exe</text>
+              <text x="150" y="58" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="13">40.7 GB</text>
+              <text x="16" y="88" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="13">ComfyUI</text>
+              <text x="150" y="88" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="13">1.3 GB</text>
+            </svg>
+          </article>
+          <article class="card">
+            <h3>Only your rules.</h3>
+            <p>Removal is limited to the FGF- group this console created. Other products keep their own blocks.</p>
+            <svg class="art" viewBox="0 0 300 140" aria-hidden="true">
+              <rect width="250" height="36" rx="10" fill="#fff"/>
+              <text x="14" y="23" fill="#1d1d1f" font-family="ui-monospace, monospace" font-size="12">FGF-svc-diagtrack</text>
+              <rect y="48" width="250" height="36" rx="10" fill="#fff"/>
+              <text x="14" y="71" fill="#86868b" font-family="Segoe UI, sans-serif" font-size="12">Other vendors stay</text>
+            </svg>
+          </article>
+          <article class="card">
+            <h3>Local, on purpose.</h3>
+            <p>The API listens on 127.0.0.1. It does not decrypt traffic or prove what left the machine.</p>
+            <svg class="art" viewBox="0 0 300 140" aria-hidden="true">
+              <rect x="70" y="20" width="140" height="90" rx="16" fill="#fff"/>
+              <text x="92" y="72" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="16" font-weight="650">127.0.0.1</text>
+            </svg>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="foot">
+    <span>A local Windows 11 console. Illustrations explain the product. They are not a live feed.</span>
+    <a href="operations.html">How to run it</a>
+  </footer>
+  <script src="site.js"></script>
+</body>
+</html>
