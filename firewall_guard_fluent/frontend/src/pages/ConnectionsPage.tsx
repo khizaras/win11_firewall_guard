@@ -5,6 +5,7 @@ import { Globe24Regular, LockClosed24Regular, Search24Regular } from '@fluentui/
 import { api, type Conn } from '../api';
 import { useApp } from '../appContext';
 import { DataTable, type DataTableColumn } from '../components/DataTable';
+import { DetailDrawer } from '../components/DetailDrawer';
 import { PageIntro, Panel, PathCell, Secondary, matchAny } from '../components/ui';
 
 const useStyles = makeStyles({
@@ -20,6 +21,7 @@ export function ConnectionsPage() {
   const [filter, setFilter] = useState('*');
   const [showListeners, setShowListeners] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
+  const [detail, setDetail] = useState<Conn | null>(null);
 
   const conns = useQuery({
     queryKey: ['connections', showListeners],
@@ -32,12 +34,12 @@ export function ConnectionsPage() {
   const byId = useMemo(() => new Map((conns.data || []).map((c: Conn) => [String(c.pid) + (c as Conn).remote_address, c])), [conns.data]);
 
   const columns: DataTableColumn<Conn>[] = [
-    { columnId: 'process', title: 'Process', compare: (a, b) => a.process.localeCompare(b.process), defaultSort: 'ascending', minWidth: 220, cell: x => (<><b>{x.process}</b><Secondary>PID {x.pid}{x.services?.length ? ' · ' + x.services.join(', ') : ''}</Secondary></>) },
-    { columnId: 'protocol', title: 'Protocol', compare: (a, b) => a.protocol.localeCompare(b.protocol), cell: x => <Badge appearance="outline">{x.protocol}</Badge> },
-    { columnId: 'local', title: 'Local endpoint', compare: (a, b) => a.local_address.localeCompare(b.local_address), minWidth: 170, cell: x => x.local_address || '—' },
-    { columnId: 'remote', title: 'Remote endpoint', compare: (a, b) => a.remote_address.localeCompare(b.remote_address), minWidth: 220, cell: x => <><b>{x.remote_ip || '—'}</b><Secondary>Port {x.remote_port || '—'}{x.listener ? ' · listener' : ''}</Secondary></> },
-    { columnId: 'state', title: 'State', compare: (a, b) => String(a.state).localeCompare(String(b.state)), cell: x => x.state || '—' },
-    { columnId: 'path', title: 'Executable', compare: (a, b) => a.program_path.localeCompare(b.program_path), minWidth: 280, cell: x => <PathCell value={x.program_path} /> },
+    { columnId: 'process', title: 'Process', compare: (a, b) => a.process.localeCompare(b.process), filterValue: x => `${x.process} ${x.pid} ${(x.services || []).join(' ')}`, defaultSort: 'ascending', minWidth: 220, cell: x => (<><b>{x.process}</b><Secondary>PID {x.pid}{x.services?.length ? ' · ' + x.services.join(', ') : ''}</Secondary></>) },
+    { columnId: 'protocol', title: 'Protocol', filter: 'select', compare: (a, b) => a.protocol.localeCompare(b.protocol), filterValue: x => x.protocol, cell: x => <Badge appearance="outline">{x.protocol}</Badge> },
+    { columnId: 'local', title: 'Local endpoint', compare: (a, b) => a.local_address.localeCompare(b.local_address), filterValue: x => x.local_address, minWidth: 170, cell: x => x.local_address || '—' },
+    { columnId: 'remote', title: 'Remote endpoint', compare: (a, b) => a.remote_address.localeCompare(b.remote_address), filterValue: x => `${x.remote_ip} ${x.remote_port} ${x.listener ? 'listener' : ''}`, minWidth: 220, cell: x => <><b>{x.remote_ip || '—'}</b><Secondary>Port {x.remote_port || '—'}{x.listener ? ' · listener' : ''}</Secondary></> },
+    { columnId: 'state', title: 'State', filter: 'select', compare: (a, b) => String(a.state).localeCompare(String(b.state)), filterValue: x => x.state || '—', cell: x => x.state || '—' },
+    { columnId: 'path', title: 'Executable', compare: (a, b) => a.program_path.localeCompare(b.program_path), filterValue: x => x.program_path, minWidth: 280, cell: x => <PathCell value={x.program_path} /> },
   ];
 
   const selectedConns = selected.map(id => byId.get(id)).filter(Boolean) as Conn[];
@@ -99,6 +101,7 @@ export function ConnectionsPage() {
           selectable
           selectedIds={selected}
           onSelectionChange={setSelected}
+          onRowClick={setDetail}
           loading={conns.isLoading}
           loadingLabel="Sampling connection table…"
           emptyText="No matching connections. Some Windows processes may require administrator permissions to inspect."
@@ -109,6 +112,26 @@ export function ConnectionsPage() {
           </MessageBar>
         )}
       </Panel>
+      {detail && (
+        <DetailDrawer
+          title={detail.process || 'Connection'}
+          subtitle={`PID ${detail.pid || 'unknown'}`}
+          pid={detail.pid || undefined}
+          onClose={() => setDetail(null)}
+          items={[
+            { label: 'Protocol', value: detail.protocol },
+            { label: 'Family', value: detail.family },
+            { label: 'State', value: detail.state },
+            { label: 'Local endpoint', value: detail.local_address },
+            { label: 'Remote address', value: detail.remote_ip },
+            { label: 'Remote port', value: detail.remote_port || undefined },
+            { label: 'Listener', value: detail.listener ? 'Yes' : undefined },
+            { label: 'Services', value: detail.services?.join(', ') },
+            { label: 'User', value: detail.username },
+            { label: 'Executable', value: <PathCell value={detail.program_path} /> },
+          ]}
+        />
+      )}
     </>
   );
 }

@@ -8,6 +8,7 @@ import { Delete24Regular, Search24Regular } from '@fluentui/react-icons';
 import { api, type LiveRule, type ManagedRule } from '../api';
 import { useApp } from '../appContext';
 import { DataTable, type DataTableColumn } from '../components/DataTable';
+import { DetailDrawer } from '../components/DetailDrawer';
 import { PageIntro, Panel, PathCell, Secondary, StatusBadge, matchAny } from '../components/ui';
 
 const useStyles = makeStyles({
@@ -36,6 +37,8 @@ export function RulesPage() {
   const [filter, setFilter] = useState('*');
   const [selectedManaged, setSelectedManaged] = useState<string[]>([]);
   const [selectedLive, setSelectedLive] = useState<string[]>([]);
+  const [managedDetail, setManagedDetail] = useState<ManagedRule | null>(null);
+  const [liveDetail, setLiveDetail] = useState<LiveRule | null>(null);
 
   const managed = useQuery({ queryKey: ['rules'], queryFn: api.managedRules, refetchInterval: 5000 });
   const live = useQuery({
@@ -64,12 +67,12 @@ export function RulesPage() {
   const selectedLiveRules = selectedLive.map(n => liveById.get(n)).filter(Boolean) as LiveRule[];
 
   const managedColumns: DataTableColumn<ManagedRule>[] = [
-    { columnId: 'created', title: 'Created', compare: (a, b) => a.created.localeCompare(b.created), defaultSort: 'descending', minWidth: 180, cell: r => new Date(r.created).toLocaleString() },
-    { columnId: 'name', title: 'Rule name', compare: (a, b) => a.name.localeCompare(b.name), minWidth: 260, cell: r => <><b>{r.name}</b><Secondary>{r.policy_id}</Secondary></> },
-    { columnId: 'target', title: 'Scope / target', cell: r => <PathCell value={targetLabelFromJson(r.target)} /> },
-    { columnId: 'status', title: 'Status', compare: (a, b) => a.status.localeCompare(b.status), cell: r => <StatusBadge value={r.status} /> },
+    { columnId: 'created', title: 'Created', compare: (a, b) => a.created.localeCompare(b.created), filterValue: r => new Date(r.created).toLocaleString(), defaultSort: 'descending', minWidth: 180, cell: r => new Date(r.created).toLocaleString() },
+    { columnId: 'name', title: 'Rule name', compare: (a, b) => a.name.localeCompare(b.name), filterValue: r => `${r.name} ${r.policy_id}`, minWidth: 260, cell: r => <><b>{r.name}</b><Secondary>{r.policy_id}</Secondary></> },
+    { columnId: 'target', title: 'Scope / target', compare: (a, b) => targetLabelFromJson(a.target).localeCompare(targetLabelFromJson(b.target)), filterValue: r => targetLabelFromJson(r.target), cell: r => <PathCell value={targetLabelFromJson(r.target)} /> },
+    { columnId: 'status', title: 'Status', filter: 'select', compare: (a, b) => a.status.localeCompare(b.status), filterValue: r => r.status, cell: r => <StatusBadge value={r.status} /> },
     {
-      columnId: 'actions', title: 'Action', cell: r => (
+      columnId: 'actions', title: 'Action', filter: 'none', cell: r => (
         <Button size="small" appearance="secondary" icon={<Delete24Regular />} disabled={r.status !== 'created' || removeSingle.isPending} aria-label="unblock" onClick={e => { e.stopPropagation(); removeSingle.mutate(r.name); }}>
           Unblock / remove
         </Button>
@@ -78,13 +81,13 @@ export function RulesPage() {
   ];
 
   const liveColumns: DataTableColumn<LiveRule>[] = [
-    { columnId: 'name', title: 'Rule', compare: (a, b) => a.name.localeCompare(b.name), defaultSort: 'ascending', minWidth: 260, cell: x => <><b>{x.name}</b><Secondary>{x.group}</Secondary></> },
-    { columnId: 'direction', title: 'Direction', compare: (a, b) => a.direction.localeCompare(b.direction), cell: x => <Badge appearance="outline">{x.direction}</Badge> },
-    { columnId: 'action', title: 'Action', compare: (a, b) => a.action.localeCompare(b.action), cell: x => <StatusBadge value={x.action} /> },
-    { columnId: 'profile', title: 'Profile', compare: (a, b) => a.profile.localeCompare(b.profile), cell: x => x.profile },
-    { columnId: 'program', title: 'Program', compare: (a, b) => a.program.localeCompare(b.program), minWidth: 240, cell: x => <PathCell value={x.program} /> },
-    { columnId: 'service', title: 'Service', compare: (a, b) => a.service.localeCompare(b.service), minWidth: 200, cell: x => x.service || '—' },
-    { columnId: 'filters', title: 'Addresses / ports', cell: x => <><span>{x.remote_addresses || 'Any'}</span>{x.remote_ports ? <Secondary>ports: {x.remote_ports}</Secondary> : null}</> },
+    { columnId: 'name', title: 'Rule', compare: (a, b) => a.name.localeCompare(b.name), filterValue: x => `${x.name} ${x.group}`, defaultSort: 'ascending', minWidth: 260, cell: x => <><b>{x.name}</b><Secondary>{x.group}</Secondary></> },
+    { columnId: 'direction', title: 'Direction', filter: 'select', compare: (a, b) => a.direction.localeCompare(b.direction), filterValue: x => x.direction, cell: x => <Badge appearance="outline">{x.direction}</Badge> },
+    { columnId: 'action', title: 'Action', filter: 'select', compare: (a, b) => a.action.localeCompare(b.action), filterValue: x => x.action, cell: x => <StatusBadge value={x.action} /> },
+    { columnId: 'profile', title: 'Profile', filter: 'select', compare: (a, b) => a.profile.localeCompare(b.profile), filterValue: x => x.profile, cell: x => x.profile },
+    { columnId: 'program', title: 'Program', compare: (a, b) => a.program.localeCompare(b.program), filterValue: x => x.program, minWidth: 240, cell: x => <PathCell value={x.program} /> },
+    { columnId: 'service', title: 'Service', compare: (a, b) => a.service.localeCompare(b.service), filterValue: x => x.service, minWidth: 200, cell: x => x.service || '—' },
+    { columnId: 'filters', title: 'Addresses / ports', compare: (a, b) => (a.remote_addresses || '').localeCompare(b.remote_addresses || ''), filterValue: x => `${x.remote_addresses || ''} ${x.remote_ports || ''} ${x.local_ports || ''} ${x.protocol || ''}`, cell: x => <><span>{x.remote_addresses || 'Any'}</span>{x.remote_ports ? <Secondary>ports: {x.remote_ports}</Secondary> : null}</> },
   ];
 
   return (
@@ -128,6 +131,7 @@ export function RulesPage() {
             selectable
             selectedIds={selectedManaged}
             onSelectionChange={setSelectedManaged}
+            onRowClick={setManagedDetail}
             loading={managed.isLoading}
             loadingLabel="Loading rule inventory…"
             emptyText="No managed rules yet. Select a process, service or IP and choose Block."
@@ -154,6 +158,7 @@ export function RulesPage() {
             selectable
             selectedIds={selectedLive}
             onSelectionChange={setSelectedLive}
+            onRowClick={setLiveDetail}
             loading={live.isLoading}
             loadingLabel="Querying Get-NetFirewallRule…"
             emptyText="No enabled block rules match the filter."
@@ -162,6 +167,38 @@ export function RulesPage() {
             <MessageBarBody>Selection on this tab is informational: inventory only. Create new block rules from the Processes, Connections, or Events pages.</MessageBarBody>
           </MessageBar>
         </Panel>
+      )}
+      {managedDetail && (
+        <DetailDrawer
+          title={managedDetail.name}
+          subtitle={managedDetail.policy_id}
+          onClose={() => setManagedDetail(null)}
+          items={[
+            { label: 'Status', value: managedDetail.status },
+            { label: 'Created', value: new Date(managedDetail.created).toLocaleString() },
+            { label: 'Scope', value: targetLabelFromJson(managedDetail.target) },
+            { label: 'Target', value: <pre style={{ margin: 0, whiteSpace: 'pre-wrap', fontFamily: 'Consolas, monospace', fontSize: 12 }}>{managedDetail.target}</pre> },
+          ]}
+        />
+      )}
+      {liveDetail && (
+        <DetailDrawer
+          title={liveDetail.name}
+          subtitle={liveDetail.group}
+          onClose={() => setLiveDetail(null)}
+          items={[
+            { label: 'Direction', value: liveDetail.direction },
+            { label: 'Action', value: liveDetail.action },
+            { label: 'Profile', value: liveDetail.profile },
+            { label: 'Enabled', value: liveDetail.enabled },
+            { label: 'Protocol', value: liveDetail.protocol },
+            { label: 'Program', value: <PathCell value={liveDetail.program} /> },
+            { label: 'Service', value: liveDetail.service },
+            { label: 'Remote addresses', value: liveDetail.remote_addresses },
+            { label: 'Remote ports', value: liveDetail.remote_ports },
+            { label: 'Local ports', value: liveDetail.local_ports },
+          ]}
+        />
       )}
     </>
   );

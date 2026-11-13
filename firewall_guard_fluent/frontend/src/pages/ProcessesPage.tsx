@@ -5,6 +5,7 @@ import { ArrowShuffle24Regular, Desktop24Regular, LockClosed24Regular, PlugConne
 import { api, type Proc, type Service } from '../api';
 import { useApp } from '../appContext';
 import { DataTable, type DataTableColumn } from '../components/DataTable';
+import { DetailDrawer } from '../components/DetailDrawer';
 import { ProcessDetailDrawer } from '../components/ProcessDetailDrawer';
 import { PageIntro, Panel, PathCell, Secondary, StatusBadge, fmtBytes, fmtRate, matchAny } from '../components/ui';
 
@@ -23,6 +24,7 @@ export function ProcessesPage() {
   const [selServiceIds, setSelServiceIds] = useState<string[]>([]);
   const [selProcIds, setSelProcIds] = useState<string[]>([]);
   const [detailProc, setDetailProc] = useState<Proc | null>(null);
+  const [detailService, setDetailService] = useState<Service | null>(null);
 
   const services = useQuery({ queryKey: ['services'], queryFn: api.services, refetchInterval: 10000 });
   const processes = useQuery({ queryKey: ['processes'], queryFn: api.processes, refetchInterval: 5000 });
@@ -33,22 +35,22 @@ export function ProcessesPage() {
   const procById = useMemo(() => new Map((processes.data || []).map(p => [String(p.pid), p])), [processes.data]);
 
   const serviceColumns: DataTableColumn<Service>[] = [
-    { columnId: 'display_name', title: 'Service', compare: (a, b) => (a.display_name || a.name).localeCompare(b.display_name || b.name), defaultSort: 'ascending', minWidth: 240, cell: x => (<><b>{x.display_name || x.name}</b><Secondary>{x.name}</Secondary></>) },
-    { columnId: 'status', title: 'Status', compare: (a, b) => a.status.localeCompare(b.status), cell: x => <StatusBadge value={x.status} /> },
-    { columnId: 'pid', title: 'PID', compare: (a, b) => a.pid - b.pid, cell: x => x.pid || '—' },
-    { columnId: 'start_type', title: 'Start type', compare: (a, b) => a.start_type.localeCompare(b.start_type), cell: x => x.start_type },
-    { columnId: 'username', title: 'Logon account', compare: (a, b) => a.username.localeCompare(b.username), cell: x => x.username || '—' },
-    { columnId: 'binpath', title: 'Executable / command', compare: (a, b) => a.binpath.localeCompare(b.binpath), minWidth: 320, cell: x => <PathCell value={x.binpath} /> },
+    { columnId: 'display_name', title: 'Service', compare: (a, b) => (a.display_name || a.name).localeCompare(b.display_name || b.name), filterValue: x => `${x.display_name || x.name} ${x.name}`, defaultSort: 'ascending', minWidth: 240, cell: x => (<><b>{x.display_name || x.name}</b><Secondary>{x.name}</Secondary></>) },
+    { columnId: 'status', title: 'Status', filter: 'select', compare: (a, b) => a.status.localeCompare(b.status), filterValue: x => x.status, cell: x => <StatusBadge value={x.status} /> },
+    { columnId: 'pid', title: 'PID', filter: 'number', compare: (a, b) => a.pid - b.pid, filterValue: x => x.pid, cell: x => x.pid || '—' },
+    { columnId: 'start_type', title: 'Start type', filter: 'select', compare: (a, b) => a.start_type.localeCompare(b.start_type), filterValue: x => x.start_type, cell: x => x.start_type },
+    { columnId: 'username', title: 'Logon account', compare: (a, b) => a.username.localeCompare(b.username), filterValue: x => x.username, cell: x => x.username || '—' },
+    { columnId: 'binpath', title: 'Executable / command', compare: (a, b) => a.binpath.localeCompare(b.binpath), filterValue: x => x.binpath, minWidth: 320, cell: x => <PathCell value={x.binpath} /> },
   ];
 
   const procColumns: DataTableColumn<Proc>[] = [
-    { columnId: 'process', title: 'Process', compare: (a, b) => a.process.localeCompare(b.process), defaultSort: 'ascending', minWidth: 220, cell: x => (<><b>{x.process || '(unknown)'}</b><Secondary>{x.status}{x.parent_name ? ` · parent ${x.parent_name}` : x.ppid ? ` · pid ${x.ppid}` : ''}</Secondary></>) },
-    { columnId: 'pid', title: 'PID', compare: (a, b) => a.pid - b.pid, cell: x => x.pid },
-    { columnId: 'services', title: 'Service association', cell: x => x.services.join(', ') || '—' },
-    { columnId: 'cpu', title: 'CPU %', compare: (a, b) => (a.cpu_percent || 0) - (b.cpu_percent || 0), cell: x => (x.cpu_percent ?? '—') + '%' },
-    { columnId: 'memory', title: 'Memory', compare: (a, b) => (a.memory_bytes || 0) - (b.memory_bytes || 0), cell: x => <span>{fmtBytes(x.memory_bytes)}<Secondary>{x.memory_percent ?? '—'}% · {x.threads || 0} threads</Secondary></span> },
-    { columnId: 'io', title: 'Disk I/O', compare: (a, b) => ((a.io_read_bytes_per_sec || 0) + (a.io_write_bytes_per_sec || 0)) - ((b.io_read_bytes_per_sec || 0) + (b.io_write_bytes_per_sec || 0)), cell: x => <span>{fmtRate(x.io_read_bytes_per_sec)} rd<br />{fmtRate(x.io_write_bytes_per_sec)} wr</span> },
-    { columnId: 'path', title: 'Executable path', compare: (a, b) => a.program_path.localeCompare(b.program_path), minWidth: 300, cell: x => <PathCell value={x.program_path} /> },
+    { columnId: 'process', title: 'Process', compare: (a, b) => a.process.localeCompare(b.process), filterValue: x => `${x.process} ${x.status} ${x.parent_name || ''}`, defaultSort: 'ascending', minWidth: 220, cell: x => (<><b>{x.process || '(unknown)'}</b><Secondary>{x.status}{x.parent_name ? ` · parent ${x.parent_name}` : x.ppid ? ` · pid ${x.ppid}` : ''}</Secondary></>) },
+    { columnId: 'pid', title: 'PID', filter: 'number', compare: (a, b) => a.pid - b.pid, filterValue: x => x.pid, cell: x => x.pid },
+    { columnId: 'services', title: 'Service association', compare: (a, b) => a.services.join(',').localeCompare(b.services.join(',')), filterValue: x => x.services.join(', '), cell: x => x.services.join(', ') || '—' },
+    { columnId: 'cpu', title: 'CPU %', filter: 'number', compare: (a, b) => (a.cpu_percent || 0) - (b.cpu_percent || 0), filterValue: x => x.cpu_percent ?? 0, cell: x => (x.cpu_percent ?? '—') + '%' },
+    { columnId: 'memory', title: 'Memory', filter: 'number', compare: (a, b) => (a.memory_bytes || 0) - (b.memory_bytes || 0), filterValue: x => x.memory_percent ?? 0, cell: x => <span>{fmtBytes(x.memory_bytes)}<Secondary>{x.memory_percent ?? '—'}% · {x.threads || 0} threads</Secondary></span> },
+    { columnId: 'io', title: 'Disk I/O', filter: 'number', compare: (a, b) => ((a.io_read_bytes_per_sec || 0) + (a.io_write_bytes_per_sec || 0)) - ((b.io_read_bytes_per_sec || 0) + (b.io_write_bytes_per_sec || 0)), filterValue: x => Math.round((x.io_read_bytes_per_sec || 0) + (x.io_write_bytes_per_sec || 0)), cell: x => <span>{fmtRate(x.io_read_bytes_per_sec)} rd<br />{fmtRate(x.io_write_bytes_per_sec)} wr</span> },
+    { columnId: 'path', title: 'Executable path', compare: (a, b) => a.program_path.localeCompare(b.program_path), filterValue: x => x.program_path, minWidth: 300, cell: x => <PathCell value={x.program_path} /> },
   ];
 
   const selectedServices = selServiceIds.map(id => svcById.get(id)).filter(Boolean) as Service[];
@@ -108,7 +110,7 @@ export function ProcessesPage() {
             selectable
             selectedIds={selServiceIds}
             onSelectionChange={setSelServiceIds}
-            onRowClick={undefined}
+            onRowClick={setDetailService}
             loading={services.isLoading}
             loadingLabel="Loading Windows services…"
             emptyText="No services match. Try * to list all services."
@@ -150,6 +152,23 @@ export function ProcessesPage() {
       )}
 
       <ProcessDetailDrawer proc={detailProc} onOpenChange={open => { if (!open) setDetailProc(null); }} />
+      {detailService && (
+        <DetailDrawer
+          title={detailService.display_name || detailService.name}
+          subtitle={detailService.name}
+          pid={detailService.pid || undefined}
+          onClose={() => setDetailService(null)}
+          items={[
+            { label: 'Status', value: detailService.status },
+            { label: 'PID', value: detailService.pid || 'Not running' },
+            { label: 'Start type', value: detailService.start_type },
+            { label: 'Logon account', value: detailService.username },
+            { label: 'Executable', value: <PathCell value={detailService.binpath} /> },
+            { label: 'Description', value: detailService.description },
+            { label: 'Installed', value: detailService.install_date },
+          ]}
+        />
+      )}
     </>
   );
 }

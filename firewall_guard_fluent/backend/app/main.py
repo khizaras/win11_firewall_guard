@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel,Field
 from .monitor import processes,connections,services,metrics
+from .resources import memory_snapshot,disk_snapshot,gpu_snapshot,terminate_process
 from .firewall import create_rule,remove_rule,validate_target,inspect_rule,create_rules_batch,remove_rules_batch,elevated
 from . import enrich,broker,traffic
 from .store import Store
@@ -49,6 +50,30 @@ def get_process_detail(pid:int,authorization:str|None=Header(default=None)):
 def get_services(authorization:str|None=Header(default=None)):auth(authorization);return services()
 @app.get("/api/metrics")
 def get_metrics(authorization:str|None=Header(default=None)):auth(authorization);return metrics()
+@app.get("/api/resources/memory")
+def get_resource_memory(authorization:str|None=Header(default=None)):
+ auth(authorization)
+ try:return memory_snapshot()
+ except Exception as e:raise HTTPException(500,str(e))
+@app.get("/api/resources/disk")
+def get_resource_disk(authorization:str|None=Header(default=None)):
+ auth(authorization)
+ try:return disk_snapshot()
+ except Exception as e:raise HTTPException(500,str(e))
+@app.get("/api/resources/gpu")
+def get_resource_gpu(authorization:str|None=Header(default=None)):
+ auth(authorization)
+ try:return gpu_snapshot()
+ except Exception as e:raise HTTPException(500,str(e))
+@app.post("/api/processes/{pid}/terminate")
+def post_terminate(pid:int,authorization:str|None=Header(default=None)):
+ auth(authorization)
+ try:
+  result=terminate_process(pid)
+  DB.log("process","Process terminated",f"{result['process']} pid {result['pid']}")
+  return result
+ except ValueError as e:raise HTTPException(400,str(e))
+ except Exception as e:raise HTTPException(500,str(e))
 @app.get("/api/connections")
 def get_connections(show_listeners:bool=False,family:str|None=None,authorization:str|None=Header(default=None)):
  auth(authorization);return connections(show_listeners=show_listeners,address_family=family or "all")

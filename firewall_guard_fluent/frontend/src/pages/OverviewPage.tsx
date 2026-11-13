@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef } from 'react';
+﻿import React, { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   Badge, Button, Card, CardHeader, MessageBar, MessageBarBody, ProgressBar, Text, Switch,
@@ -8,7 +8,8 @@ import {
   ArrowRight24Regular, Globe24Regular, HardDrive24Regular, ShieldCheckmark24Regular, Wifi124Regular,
 } from '@fluentui/react-icons';
 import { api } from '../api';
-import { Metric, PageIntro, Panel, Secondary, Sparkline, fmtBytes, fmtRate, MeterRow } from '../components/ui';
+import { LiveChart, useLiveSamples } from '../components/LiveChart';
+import { Metric, PageIntro, Panel, Secondary, fmtBytes, fmtRate, MeterRow } from '../components/ui';
 
 const useStyles = makeStyles({
   grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: tokens.spacingVerticalS },
@@ -32,16 +33,17 @@ export function OverviewPage({ onNavigate, onDryToggle, dry }: { onNavigate: (pa
   const rules = useQuery({ queryKey: ['rules'], queryFn: api.managedRules, refetchInterval: 5000 });
   const activity = useQuery({ queryKey: ['activity'], queryFn: api.activity, refetchInterval: 10000 });
 
-  const history = useRef<{ cpu: number[]; mem: number[]; sent: number[]; recv: number[]; read: number[]; write: number[] }>({ cpu: [], mem: [], sent: [], recv: [], read: [], write: [] });
   const m = metrics.data;
-  useEffect(() => {
-    if (!m) return;
-    const h = history.current;
-    const push = (arr: number[], v: number) => { arr.push(v); if (arr.length > 120) arr.shift(); };
-    push(h.cpu, m.cpu_percent); push(h.mem, m.memory_percent);
-    push(h.sent, m.net_sent_bytes_per_sec); push(h.recv, m.net_recv_bytes_per_sec);
-    push(h.read, m.disk_read_bytes_per_sec); push(h.write, m.disk_write_bytes_per_sec);
-  }, [m]);
+  const point = useMemo(() => m ? {
+    t: m.sampled_at || Date.now() / 1000,
+    values: {
+      cpu: m.cpu_percent, mem: m.memory_percent,
+      sent: m.net_sent_bytes_per_sec, recv: m.net_recv_bytes_per_sec,
+      read: m.disk_read_bytes_per_sec, write: m.disk_write_bytes_per_sec,
+    },
+  } : null, [m]);
+  const samples = useLiveSamples(point, 40);
+  const series = (id: string) => samples.map(p => p.values[id] ?? 0);
   const cpu = m?.cpu_percent ?? 0;
   const ram = m?.memory_percent ?? 0;
 
@@ -75,7 +77,7 @@ export function OverviewPage({ onNavigate, onDryToggle, dry }: { onNavigate: (pa
       </div>
 
       <div className={s.grid} style={{ marginBottom: tokens.spacingVerticalM }}>
-        <Metric label="Remote connections" value={overview.data?.connection_count ?? 'â€”'} detail={`${overview.data?.process_count ?? 'â€”'} processes observed`} icon={<Globe24Regular />} />
+        <Metric label="Remote connections" value={overview.data?.connection_count ?? '—'} detail={`${overview.data?.process_count ?? '—'} processes observed`} icon={<Globe24Regular />} />
         <Metric label="Managed block rules" value={overview.data?.managed_rules ?? 'â€”'} detail={`${activeRules} recorded active`} icon={<ShieldCheckmark24Regular />} />
         <Metric label="Network throughput" value={<span>â†“ {fmtRate(m?.net_recv_bytes_per_sec)} Â· â†‘ {fmtRate(m?.net_sent_bytes_per_sec)}</span>} detail="received / sent across all interfaces" icon={<Wifi124Regular />} tone="brand" />
         <Metric label="Disk writes" value={fmtRate(m?.disk_write_bytes_per_sec)} detail="system-wide current write rate" icon={<HardDrive24Regular />} tone="orange" />
@@ -107,22 +109,26 @@ export function OverviewPage({ onNavigate, onDryToggle, dry }: { onNavigate: (pa
                   <Text weight="semibold">{p.profile}</Text>
                   <Badge appearance="filled" color={p.enabled === 'True' ? 'success' : 'warning'}>{p.enabled === 'True' ? 'Active' : 'Disabled'}</Badge>
                 </div>
-                <Text size={200} style={{ color: tokens.colorNeutralForeground2 }}>Inbound: {p.default_inbound_action || 'â€”'} Â· Outbound: {p.default_outbound_action || 'â€”'}</Text>
+                <Text size={200} style={{ color: tokens.colorNeutralForeground2 }}>Inbound: {p.default_inbound_action || '—'} · Outbound: {p.default_outbound_action || '—'}</Text>
               </div>
             ))}
             {!profiles.length && <MessageBar intent="info"><MessageBarBody>Profile state is not available on this platform.</MessageBarBody></MessageBar>}
           </div>
         </Panel>
 
-        <Panel title="Trend â€” last 2 minutes" subtitle="Sparklines from live samples">
-          <div style={{ display: 'grid', gap: 10 }}>
-            <div className={s.chartRow}><span className={s.chartLabel}>CPU</span><Sparkline values={history.current.cpu} /><Badge>{(history.current.cpu.at(-1) ?? 0).toFixed(1)}%</Badge></div>
-            <div className={s.chartRow}><span className={s.chartLabel}>Memory</span><Sparkline values={history.current.mem} color={tokens.colorPaletteGreenForeground1} /><Badge>{(history.current.mem.at(-1) ?? 0).toFixed(1)}%</Badge></div>
-            <div className={s.chartRow}><span className={s.chartLabel}>Net â†“</span><Sparkline values={history.current.recv} color={tokens.colorPaletteGreenForeground1} /><Badge>{fmtBytes(history.current.recv.at(-1) ?? 0)}/s</Badge></div>
-            <div className={s.chartRow}><span className={s.chartLabel}>Net â†‘</span><Sparkline values={history.current.sent} color={tokens.colorBrandForeground2} /><Badge>{fmtBytes(history.current.sent.at(-1) ?? 0)}/s</Badge></div>
-            <div className={s.chartRow}><span className={s.chartLabel}>Disk reads</span><Sparkline values={history.current.read} color={tokens.colorPaletteMarigoldBorderActive} /><Badge>{fmtBytes(history.current.read.at(-1) ?? 0)}/s</Badge></div>
-            <div className={s.chartRow}><span className={s.chartLabel}>Disk writes</span><Sparkline values={history.current.write} color={tokens.colorPaletteRedForeground1} /><Badge>{fmtBytes(history.current.write.at(-1) ?? 0)}/s</Badge></div>
-          </div>
+        <Panel title="Last two minutes" subtitle="Live samples, refreshed every 3 seconds">
+          <LiveChart title="CPU and memory" unit="%" yMax={100} height={140} series={[
+            { id: 'cpu', label: 'CPU', color: tokens.colorBrandForeground1, values: series('cpu'), format: n => `${n.toFixed(1)}%` },
+            { id: 'mem', label: 'Memory', color: tokens.colorPaletteGreenForeground1, values: series('mem'), format: n => `${n.toFixed(1)}%` },
+          ]} />
+          <LiveChart title="Network" height={120} series={[
+            { id: 'recv', label: 'In', color: tokens.colorPaletteTealForeground2, values: series('recv'), format: n => fmtRate(n) },
+            { id: 'sent', label: 'Out', color: tokens.colorBrandForeground2, values: series('sent'), format: n => fmtRate(n) },
+          ]} />
+          <LiveChart title="Disk" height={120} series={[
+            { id: 'read', label: 'Read', color: tokens.colorPaletteMarigoldForeground1, values: series('read'), format: n => fmtRate(n) },
+            { id: 'write', label: 'Write', color: tokens.colorPaletteRedForeground1, values: series('write'), format: n => fmtRate(n) },
+          ]} />
         </Panel>
 
         <Panel title="Recent security activity" subtitle="Latest local audit records" action={<Button appearance="subtle" size="small" onClick={() => onNavigate('events')}>View events</Button>}>

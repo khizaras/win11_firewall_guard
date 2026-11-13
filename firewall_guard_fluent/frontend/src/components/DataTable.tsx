@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
-import {
-  DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow,
-  makeStyles, mergeClasses, Spinner, tokens,
-} from '@fluentui/react-components';
-import { Empty } from './ui';
+import React, { useMemo, useState } from 'react';
+import { Button, Spinner, Text, tokens } from '@fluentui/react-components';
+import { ArrowSort16Regular, ArrowSortDown16Regular, ArrowSortUp16Regular } from '@fluentui/react-icons';
+import { wildcardMatch } from './ui';
 
 type SortDirection = 'ascending' | 'descending';
-type SortDef = { sortColumn: string; sortDirection: SortDirection };
+
+export type ColumnFilter = 'text' | 'number' | 'select' | 'none';
 
 export type DataTableColumn<T> = {
   columnId: string;
   title: string;
   compare?: (a: T, b: T) => number;
   cell: (item: T) => React.ReactNode;
-  defaultSort?: 'ascending' | 'descending';
+  /** Plain text used by the column filter and shown as the cell tooltip when set. */
+  filterValue?: (item: T) => string | number | null | undefined;
+  filter?: ColumnFilter;
+  defaultSort?: SortDirection;
   minWidth?: number;
 };
 
@@ -31,98 +33,211 @@ type Props<T> = {
   emptyText?: string;
 };
 
-const useStyles = makeStyles({
-  wrap: { overflow: 'auto', borderRadius: tokens.borderRadiusMedium, border: `1px solid ${tokens.colorNeutralStroke2}`, background: tokens.colorNeutralBackground1, maxHeight: '70vh' },
-  grid: { minWidth: '820px', width: '100%' },
-  headSticky: { '&&& th': { position: 'sticky', top: 0, zIndex: 2, background: tokens.colorNeutralBackground2, boxShadow: `0 1px 0 ${tokens.colorNeutralStroke1}` } },
-  headCell: { fontSize: tokens.fontSizeBase100, fontWeight: tokens.fontWeightSemibold, color: tokens.colorNeutralForeground2, whiteSpace: 'nowrap' as const },
-  cellBase: { fontSize: tokens.fontSizeBase200 },
-  clickableRow: { cursor: 'pointer' },
-});
+const textOf = <T,>(col: DataTableColumn<T>, item: T) => String(col.filterValue?.(item) ?? '').trim();
 
-const normalizeSelection = (data: unknown): string[] => {
-  const inner = (data as { selectedItems?: string[] | Set<string> })?.selectedItems ?? data;
-  if (inner instanceof Set) return Array.from(inner);
-  if (Array.isArray(inner)) return inner;
-  return [];
-};
+function passesFilter(raw: string, query: string, kind: ColumnFilter): boolean {
+  const q = query.trim();
+  if (!q || q === '*') return true;
+  if (kind === 'select') return raw.toLowerCase() === q.toLowerCase();
+  if (kind === 'number') {
+    const op = q.match(/^(>=|<=|>|<|=)\s*(-?\d+(?:\.\d+)?)$/);
+    if (op) {
+      const n = Number(raw.replace(/,/g, '').match(/-?\d+(?:\.\d+)?/)?.[0] ?? NaN);
+      const t = Number(op[2]);
+      if (!Number.isFinite(n)) return false;
+      if (op[1] === '>') return n > t;
+      if (op[1] === '<') return n < t;
+      if (op[1] === '>=') return n >= t;
+      if (op[1] === '<=') return n <= t;
+      return n === t;
+    }
+  }
+  if (q.includes('*') || q.includes('?')) {
+    const pattern = q.startsWith('*') || q.endsWith('*') || q.includes('?') ? q : `*${q}*`;
+    return wildcardMatch(raw, pattern);
+  }
+  return raw.toLowerCase().includes(q.toLowerCase());
+}
 
 export function DataTable<T>(props: Props<T>) {
-  const { items, columns, getRowId, ariaLabel, selectable, selectedIds, onSelectionChange, onRowClick, loading, loadingLabel, emptyText } = props;
-  const s = useStyles();
-  const defaultCol = columns.find(c => c.defaultSort) ?? columns.find(c => c.compare);
-  const [sort, setSort] = useState<SortDef>({
-    sortColumn: defaultCol?.columnId ?? '',
-    sortDirection: defaultCol?.defaultSort === 'descending' ? 'descending' : 'ascending',
+  const { items, columns, getRowId, ariaLabel, selectable, selectedIds = [], onSelectionChange, onRowClick, loading, loadingLabel, emptyText } = props;
+  const defaultCol = columns.find(c => c.defaultSort && c.compare) ?? columns.find(c => c.compare);
+  const [sort, setSort] = useState<{ columnId: string; direction: SortDirection }>({
+    columnId: defaultCol?.columnId ?? '',
+    direction: defaultCol?.defaultSort === 'descending' ? 'descending' : 'ascending',
   });
+  const [filters, setFilters] = useState<Record<string, string>>({});
 
-  if (loading) return <div style={{ padding: '32px', textAlign: 'center' }}><Spinner label={loadingLabel || 'Loading…'} /></div>;
+  const filterable = columns.filter(c => (c.filter ?? 'text') !== 'none');
+  const activeFilters = filterable.filter(c => (filters[c.columnId] || '').trim());
 
-  /* Sorting applied client-side with the column compare helper. */
-  const sorted = (() => {
-    const col = columns.find(c => c.columnId === sort.sortColumn);
-    if (!col?.compare) return items;
-    const copy = [...items];
-    copy.sort((a, b) => sort.sortDirection === 'descending' ? -col.compare!(a, b) : col.compare!(a, b));
+  const optionsFor = (col: DataTableColumn<T>) => {
+    const values = new Set<string>();
+    for (const item of items) {
+      const v = textOf(col, item);
+      if (v) values.add(v);
+      if (values.size > 40) return null;
+    }
+    return Array.from(values).sort((a, b) => a.localeCompare(b));
+  };
+
+  const kindOf = (col: DataTableColumn<T>): ColumnFilter => {
+    const kind = col.filter ?? 'text';
+    if (kind !== 'select') return kind;
+    return optionsFor(col) ? 'select' : 'text';
+  };
+
+  const filtered = useMemo(() => items.filter(item =>
+    filterable.every(col => passesFilter(textOf(col, item), filters[col.columnId] || '', kindOf(col))),
+  ), [items, filters, columns]);
+
+  const sorted = useMemo(() => {
+    const col = columns.find(c => c.columnId === sort.columnId);
+    if (!col?.compare) return filtered;
+    const copy = [...filtered];
+    copy.sort((a, b) => (sort.direction === 'descending' ? -col.compare!(a, b) : col.compare!(a, b)));
     return copy;
-  })();
+  }, [filtered, columns, sort]);
 
-  const defs = columns.map(c => ({
-    columnId: c.columnId,
-    title: c.title,
-    compare: c.compare ?? (() => 0),
-    renderHeaderCell: () => c.title,
-    renderCell: (item: T) => c.cell(item),
-    minWidth: c.minWidth,
-  }));
+  const visibleIds = sorted.map(getRowId);
+  const selectedVisible = visibleIds.filter(id => selectedIds.includes(id));
+  const allVisible = visibleIds.length > 0 && selectedVisible.length === visibleIds.length;
 
-  type RowInfo = { item: T; rowId: string | number };
-  const bodyRender = (({ item, rowId }: RowInfo) => (
-    <DataGridRow
-      key={String(rowId)}
-      selectionCell={selectable ? { 'aria-label': `Select row ${rowId}` } : undefined}
-      className={onRowClick ? s.clickableRow : undefined}
-      onClick={onRowClick ? () => onRowClick(item) : undefined}
-    >
-      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-      {col => (
-        <DataGridCell key={col.columnId} style={{ minWidth: (col as any).minWidth ?? undefined, whiteSpace: 'normal' }}>
-          {(col as any).renderCell ? (col as any).renderCell(item) : null}
-        </DataGridCell>
-      )}
-    </DataGridRow>
-  ));
+  const toggleSort = (col: DataTableColumn<T>) => {
+    if (!col.compare) return;
+    setSort(prev => prev.columnId === col.columnId
+      ? { columnId: col.columnId, direction: prev.direction === 'ascending' ? 'descending' : 'ascending' }
+      : { columnId: col.columnId, direction: col.defaultSort === 'descending' ? 'descending' : 'ascending' });
+  };
+
+  const setFilter = (id: string, value: string) => setFilters(prev => ({ ...prev, [id]: value }));
+
+  const toggleRow = (id: string) => {
+    if (!onSelectionChange) return;
+    onSelectionChange(selectedIds.includes(id) ? selectedIds.filter(x => x !== id) : [...selectedIds, id]);
+  };
+
+  const toggleAll = () => {
+    if (!onSelectionChange) return;
+    if (allVisible) onSelectionChange(selectedIds.filter(id => !visibleIds.includes(id)));
+    else onSelectionChange(Array.from(new Set([...selectedIds, ...visibleIds])));
+  };
+
+  if (loading) return <div style={{ padding: 32, textAlign: 'center' }}><Spinner label={loadingLabel || 'Loading…'} /></div>;
+
+  const tableMin = columns.reduce((n, c) => n + (c.minWidth ?? 120), selectable ? 44 : 0);
 
   return (
-    <div className={s.wrap}>
-      <DataGrid
-        className={`${s.grid} ${s.headSticky}`}
-        items={sorted}
-        columns={defs}
-        getRowId={getRowId}
-        aria-label={ariaLabel}
-        focusMode="composite"
-        subtleSelection
-        selectionMode={selectable ? 'multiselect' : undefined}
-        selectedItems={selectable ? selectedIds : undefined}
-        onSelectionChange={selectable && onSelectionChange ? (_e, data) => onSelectionChange(normalizeSelection(data)) : undefined}
-        sortState={sort}
-        onSortChange={(_e, data) => setSort({ sortColumn: String(data.sortColumn), sortDirection: data.sortDirection === 'descending' ? 'descending' : 'ascending' })}
-      >
-        <DataGridHeader>
-          <DataGridRow selectionCell={selectable ? { 'aria-hidden': true } : undefined}>
-            {col => (
-              <DataGridHeaderCell key={col.columnId} className={s.headCell}>
-                {col.renderHeaderCell()}
-              </DataGridHeaderCell>
-            )}
-          </DataGridRow>
-        </DataGridHeader>
-        <DataGridBody>{bodyRender}</DataGridBody>
-      </DataGrid>
-      {!items.length && <Empty>{emptyText || 'No matching records.'}</Empty>}
+    <div className="fg-grid-wrap">
+      <div className="fg-grid-meta">
+        <Text size={200}>
+          {sorted.length === items.length ? `${items.length} rows` : `${sorted.length} of ${items.length} rows`}
+          {sort.columnId ? ` · sorted by ${columns.find(c => c.columnId === sort.columnId)?.title ?? sort.columnId}` : ''}
+          {onRowClick ? ' · click a row for details' : ''}
+        </Text>
+        {activeFilters.length > 0 && (
+          <Button appearance="subtle" size="small" onClick={() => setFilters({})}>Clear {activeFilters.length} column filter{activeFilters.length === 1 ? '' : 's'}</Button>
+        )}
+      </div>
+      <div className="fg-grid-scroll">
+        <table className="fg-grid" aria-label={ariaLabel} style={{ minWidth: tableMin }}>
+          <colgroup>
+            {selectable && <col style={{ width: 44 }} />}
+            {columns.map(c => <col key={c.columnId} style={{ width: c.minWidth ?? 140 }} />)}
+          </colgroup>
+          <thead>
+            <tr>
+              {selectable && (
+                <th className="fg-check">
+                  <input type="checkbox" aria-label="Select all visible rows" checked={allVisible} onChange={toggleAll} />
+                </th>
+              )}
+              {columns.map(col => {
+                const active = sort.columnId === col.columnId && !!col.compare;
+                const Icon = !col.compare ? null : !active ? ArrowSort16Regular : sort.direction === 'ascending' ? ArrowSortUp16Regular : ArrowSortDown16Regular;
+                return (
+                  <th key={col.columnId} aria-sort={active ? sort.direction : 'none'}>
+                    {col.compare ? (
+                      <button type="button" className="fg-sort" onClick={() => toggleSort(col)} aria-label={`Sort by ${col.title}`}>
+                        <span className="label">{col.title}</span>
+                        {Icon && <Icon className={active ? 'mark on' : 'mark'} />}
+                      </button>
+                    ) : (
+                      <span className="fg-sort static"><span className="label">{col.title}</span></span>
+                    )}
+                  </th>
+                );
+              })}
+            </tr>
+            <tr className="fg-filters">
+              {selectable && <th className="fg-check" />}
+              {columns.map(col => {
+                const kind = col.filter ?? 'text';
+                if (kind === 'none') return <th key={col.columnId} />;
+                const selectOptions = kind === 'select' ? optionsFor(col) : null;
+                const useSelect = kind === 'select' && selectOptions;
+                return (
+                  <th key={col.columnId}>
+                    {useSelect ? (
+                      <select
+                        className="fg-filter"
+                        aria-label={`Filter ${col.title}`}
+                        value={filters[col.columnId] || ''}
+                        onChange={e => setFilter(col.columnId, e.target.value)}
+                      >
+                        <option value="">All</option>
+                        {selectOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                      </select>
+                    ) : (
+                      <input
+                        className="fg-filter"
+                        aria-label={`Filter ${col.title}`}
+                        placeholder={kind === 'number' ? '> 0' : 'Filter'}
+                        value={filters[col.columnId] || ''}
+                        onChange={e => setFilter(col.columnId, e.target.value)}
+                      />
+                    )}
+                  </th>
+                );
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {sorted.map(item => {
+              const id = getRowId(item);
+              const selected = selectedIds.includes(id);
+              return (
+                <tr
+                  key={id}
+                  className={onRowClick ? 'clickable' : undefined}
+                  data-selected={selected || undefined}
+                  onClick={onRowClick ? (event) => {
+                    const target = event.target as HTMLElement | null;
+                    if (target?.closest('button, a, input, select, textarea, label')) return;
+                    onRowClick(item);
+                  } : undefined}
+                >
+                  {selectable && (
+                    <td className="fg-check" onClick={e => e.stopPropagation()}>
+                      <input type="checkbox" aria-label={`Select ${id}`} checked={selected} onChange={() => toggleRow(id)} />
+                    </td>
+                  )}
+                  {columns.map(col => (
+                    <td key={col.columnId}>
+                      <div className="fg-cell" title={textOf(col, item) || undefined}>{col.cell(item)}</div>
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      {!sorted.length && (
+        <div className="fg-grid-empty" style={{ color: tokens.colorNeutralForeground3 }}>
+          {items.length ? 'No rows match the column filters.' : (emptyText || 'No matching records.')}
+        </div>
+      )}
     </div>
   );
 }
-
-export { mergeClasses };

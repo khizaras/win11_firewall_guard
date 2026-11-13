@@ -148,4 +148,31 @@ export const api = {
     request<{ success?: number; items?: BatchResultItem[]; error?: string }>('/api/rules/delete-batch', { method: 'POST', body: JSON.stringify({ names }) }),
   remove: (name: string) => request<RuleResult>(`/api/rules/${encodeURIComponent(name)}`, { method: 'DELETE' }),
   dry: (enabled: boolean) => request<{ dry_run: boolean; live_enforcement: boolean }>('/api/dry-run', { method: 'POST', body: JSON.stringify({ enabled }) }),
+  resourceMemory: () => request<MemoryResource>('/api/resources/memory'),
+  resourceDisk: () => request<DiskResource>('/api/resources/disk'),
+  resourceGpu: () => request<GpuResource>('/api/resources/gpu'),
+  terminateProcess: (pid: number) => request<{ status: string; pid: number; process: string; forced: boolean }>(`/api/processes/${pid}/terminate`, { method: 'POST', body: '{}' }),
 };
+
+export type ResourceApp = {
+  pid: number; process: string; program_path: string; status?: string; protected: boolean;
+  memory_bytes?: number; memory_percent?: number;
+  read_bytes_per_sec?: number; write_bytes_per_sec?: number;
+  read_bytes_total?: number; write_bytes_total?: number;
+  usage_percent?: number; dedicated_bytes?: number; shared_bytes?: number;
+};
+export type MemoryResource = {
+  sampled_at: number; total_bytes: number; used_bytes: number; available_bytes: number; free_bytes: number;
+  standby_bytes: number; used_percent: number; swap_total_bytes: number; swap_used_bytes: number; swap_free_bytes: number;
+  swap_percent: number; apps: ResourceApp[];
+};
+export type DiskVolume = {
+  device: string; mountpoint: string; filesystem: string; total_bytes: number; used_bytes: number;
+  free_bytes: number; available_bytes: number; percent: number;
+};
+export type DiskResource = { sampled_at: number; read_bytes_per_sec: number; write_bytes_per_sec: number; volumes: DiskVolume[]; apps: ResourceApp[] };
+export type GpuAdapter = {
+  name: string; usage_percent: number; memory_total_bytes: number; memory_used_bytes: number;
+  memory_free_bytes: number; memory_available_bytes: number; shared_used_bytes: number;
+};
+export type GpuResource = { sampled_at: number; source: string; note: string; adapters: GpuAdapter[]; apps: ResourceApp[] };

@@ -12,6 +12,7 @@ import {
 import { api, type DomainPattern, type TrafficRow } from '../api';
 import { useApp } from '../appContext';
 import { DataTable, type DataTableColumn } from '../components/DataTable';
+import { DetailDrawer } from '../components/DetailDrawer';
 import { PageIntro, Panel, PathCell, Secondary, matchAny } from '../components/ui';
 
 const useStyles = makeStyles({
@@ -64,6 +65,7 @@ export function TrafficPage() {
   const [autoRun, setAutoRun] = useState(true);
   const [includeListeners, setIncludeListeners] = useState(false);
   const [detail, setDetail] = useState<TrafficRow | null>(null);
+  const [patternDetail, setPatternDetail] = useState<DomainPattern | null>(null);
   const [patternInput, setPatternInput] = useState('');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [captureOn, setCaptureOn] = useState<boolean | null>(null);
@@ -187,23 +189,23 @@ export function TrafficPage() {
 
   const columns: DataTableColumn<TrafficRow>[] = [
     {
-      columnId: 'time', title: 'Time', compare: (a, b) => String(b.time).localeCompare(String(a.time)), defaultSort: 'ascending', minWidth: 150,
+      columnId: 'time', title: 'Time', compare: (a, b) => String(a.time).localeCompare(String(b.time)), filterValue: r => `${r.time} ${r.state} ${r.event_id}`, defaultSort: 'descending', minWidth: 150,
       cell: r => (
         <span>
           {relTime(r.time)}
-          {r.kind === 'conn' && <Secondary>live Â· {r.state || ''}</Secondary>}
+          {r.kind === 'conn' && <Secondary>live · {r.state || ''}</Secondary>}
           {r.kind === 'event' && <Secondary>{r.event_id}</Secondary>}
         </span>
       ),
     },
-    { columnId: 'verdict', title: 'Verdict', compare: (a, b) => a.verdict.localeCompare(b.verdict), cell: r => <Badge appearance="filled" color={verdictColor(r.verdict)}>{r.verdict}</Badge> },
+    { columnId: 'verdict', title: 'Verdict', filter: 'select', compare: (a, b) => a.verdict.localeCompare(b.verdict), filterValue: r => r.verdict, cell: r => <Badge appearance="filled" color={verdictColor(r.verdict)}>{r.verdict}</Badge> },
     {
-      columnId: 'direction', title: 'Dir', compare: (a, b) => a.direction.localeCompare(b.direction),
+      columnId: 'direction', title: 'Dir', filter: 'select', compare: (a, b) => a.direction.localeCompare(b.direction), filterValue: r => r.direction || 'unknown',
       cell: r => r.direction === 'inbound' ? <Tooltip content="Inbound" relationship="label"><ArrowDown24Regular /></Tooltip>
         : r.direction === 'outbound' ? <Tooltip content="Outbound" relationship="label"><ArrowUp24Regular /></Tooltip> : <Text size={100}>?</Text>,
     },
     {
-      columnId: 'app', title: 'Application', compare: (a, b) => (a.process || a.app).localeCompare(b.process || b.app), defaultSort: 'descending', minWidth: 220,
+      columnId: 'app', title: 'Application', compare: (a, b) => (a.process || a.app).localeCompare(b.process || b.app), filterValue: r => `${r.process} ${r.app} ${r.pid} ${(r.services || []).join(' ')}`, minWidth: 220,
       cell: r => (
         <span>
           <b>{r.process || (r.app ? r.app.split('\\').pop() : '(system / no process)')}</b>
@@ -212,35 +214,35 @@ export function TrafficPage() {
         </span>
       ),
     },
-    { columnId: 'local', title: 'Local', compare: (a, b) => a.local_address.localeCompare(b.local_address), cell: r => <span style={{ fontFamily: 'Consolas, monospace', fontSize: tokens.fontSizeBase100 }}>{r.local_address || 'â€”'}</span> },
+    { columnId: 'local', title: 'Local', compare: (a, b) => a.local_address.localeCompare(b.local_address), filterValue: r => r.local_address, cell: r => <span style={{ fontFamily: 'Consolas, monospace', fontSize: tokens.fontSizeBase100 }}>{r.local_address || '—'}</span> },
     {
-      columnId: 'remote', title: 'Remote', compare: (a, b) => (a.remote_ip + ':' + a.remote_port).localeCompare(b.remote_ip + ':' + b.remote_port), minWidth: 220,
+      columnId: 'remote', title: 'Remote', compare: (a, b) => (a.remote_ip + ':' + a.remote_port).localeCompare(b.remote_ip + ':' + b.remote_port), filterValue: r => `${r.remote_ip} ${r.remote_port} ${r.hostname}`, minWidth: 220,
       cell: r => (
         <span>
-          <b style={{ fontFamily: 'Consolas, monospace', fontSize: tokens.fontSizeBase200 }}>{r.remote_ip || 'â€”'}</b>
+          <b style={{ fontFamily: 'Consolas, monospace', fontSize: tokens.fontSizeBase200 }}>{r.remote_ip || '—'}</b>
           {r.remote_port ? <Secondary>Port {r.remote_port}</Secondary> : null}
           {r.hostname && <Secondary>{r.hostname}</Secondary>}
         </span>
       ),
     },
-    { columnId: 'protocol', title: 'Proto', compare: (a, b) => a.protocol.localeCompare(b.protocol), cell: r => <Badge appearance="outline">{r.protocol || 'â€”'}</Badge> },
+    { columnId: 'protocol', title: 'Proto', filter: 'select', compare: (a, b) => a.protocol.localeCompare(b.protocol), filterValue: r => r.protocol || '—', cell: r => <Badge appearance="outline">{r.protocol || '—'}</Badge> },
   ];
 
   const patternColumns: DataTableColumn<DomainPattern>[] = [
     {
-      columnId: 'pattern', title: 'Pattern', compare: (a, b) => a.pattern.localeCompare(b.pattern), defaultSort: 'ascending', minWidth: 220,
+      columnId: 'pattern', title: 'Pattern', compare: (a, b) => a.pattern.localeCompare(b.pattern), filterValue: p => p.pattern, defaultSort: 'ascending', minWidth: 220,
       cell: p => <b>{p.pattern}</b>,
     },
-    { columnId: 'enabled', title: 'Active', cell: p => <Switch size="small" checked={p.enabled} onChange={(_, d) => togglePattern.mutate({ id: p.id, enabled: d.checked })} /> },
+    { columnId: 'enabled', title: 'Active', filter: 'select', compare: (a, b) => Number(a.enabled) - Number(b.enabled), filterValue: p => p.enabled ? 'on' : 'off', cell: p => <Switch size="small" checked={p.enabled} onChange={(_, d) => togglePattern.mutate({ id: p.id, enabled: d.checked })} /> },
     {
-      columnId: 'domains', title: 'Resolved domains', cell: p => (
-        <span>{(p.resolved?.domains || []).slice(0, 3).join(', ') || 'â€”'}{(p.resolved?.domains?.length || 0) > 3 ? ` +${(p.resolved!.domains?.length || 0) - 3}` : ''}</span>
+      columnId: 'domains', title: 'Resolved domains', compare: (a, b) => (a.resolved?.domains || []).join(',').localeCompare((b.resolved?.domains || []).join(',')), filterValue: p => (p.resolved?.domains || []).join(', '), cell: p => (
+        <span>{(p.resolved?.domains || []).slice(0, 3).join(', ') || '—'}{(p.resolved?.domains?.length || 0) > 3 ? ` +${(p.resolved!.domains?.length || 0) - 3}` : ''}</span>
       ),
     },
-    { columnId: 'ips', title: 'IPs', cell: p => String(p.resolved?.ips?.length || 0), compare: (a, b) => (a.resolved?.ips?.length || 0) - (b.resolved?.ips?.length || 0) },
-    { columnId: 'delta', title: 'Pending', cell: p => <>{(p.resolved?.add_n || 0) > 0 && <Badge appearance="filled" color="warning">+{p.resolved?.add_n}</Badge>}{(p.resolved?.remove_n || 0) > 0 && <Badge appearance="filled" color="danger">-{p.resolved?.remove_n}</Badge>}{!(p.resolved?.add_n || 0) && !(p.resolved?.remove_n || 0) && <Badge appearance="outline">in sync</Badge>}</> },
-    { columnId: 'created', title: 'Added', cell: p => new Date(p.created).toLocaleString(), compare: (a, b) => a.created.localeCompare(b.created) },
-    { columnId: 'actions', title: 'Action', cell: p => <Button size="small" appearance="subtle" aria-label="remove" icon={<Delete24Regular />} onClick={() => removePattern.mutate(p.id)}>Remove</Button> },
+    { columnId: 'ips', title: 'IPs', filter: 'number', cell: p => String(p.resolved?.ips?.length || 0), compare: (a, b) => (a.resolved?.ips?.length || 0) - (b.resolved?.ips?.length || 0), filterValue: p => p.resolved?.ips?.length || 0 },
+    { columnId: 'delta', title: 'Pending', filter: 'select', compare: (a, b) => ((a.resolved?.add_n || 0) + (a.resolved?.remove_n || 0)) - ((b.resolved?.add_n || 0) + (b.resolved?.remove_n || 0)), filterValue: p => ((p.resolved?.add_n || 0) || (p.resolved?.remove_n || 0)) ? 'pending' : 'in sync', cell: p => <>{(p.resolved?.add_n || 0) > 0 && <Badge appearance="filled" color="warning">+{p.resolved?.add_n}</Badge>}{(p.resolved?.remove_n || 0) > 0 && <Badge appearance="filled" color="danger">-{p.resolved?.remove_n}</Badge>}{!(p.resolved?.add_n || 0) && !(p.resolved?.remove_n || 0) && <Badge appearance="outline">in sync</Badge>}</> },
+    { columnId: 'created', title: 'Added', cell: p => new Date(p.created).toLocaleString(), compare: (a, b) => a.created.localeCompare(b.created), filterValue: p => new Date(p.created).toLocaleString() },
+    { columnId: 'actions', title: 'Action', filter: 'none', cell: p => <Button size="small" appearance="subtle" aria-label="remove" icon={<Delete24Regular />} onClick={() => removePattern.mutate(p.id)}>Remove</Button> },
   ];
 
   return (
@@ -359,6 +361,7 @@ export function TrafficPage() {
           columns={patternColumns}
           getRowId={p => String(p.id)}
           ariaLabel="Domain block patterns"
+          onRowClick={setPatternDetail}
           loading={patterns.isLoading}
           loadingLabel="Evaluating patterns against DNS cacheâ€¦"
           emptyText="No domain patterns yet. Add *example.com* style patterns above; the worker keeps their IPs blocked automatically."
@@ -370,6 +373,22 @@ export function TrafficPage() {
         )}
       </Panel>
 
+      {patternDetail && (
+        <DetailDrawer
+          title={patternDetail.pattern}
+          subtitle={patternDetail.enabled ? 'Enabled' : 'Disabled'}
+          onClose={() => setPatternDetail(null)}
+          items={[
+            { label: 'Resolved domains', value: (patternDetail.resolved?.domains || []).join(', ') },
+            { label: 'Resolved IPs', value: (patternDetail.resolved?.ips || []).join(', ') },
+            { label: 'Active rules', value: patternDetail.resolved?.active_rules },
+            { label: 'To add', value: patternDetail.resolved?.add_n },
+            { label: 'To remove', value: patternDetail.resolved?.remove_n },
+            { label: 'Added', value: patternDetail.created ? new Date(patternDetail.created).toLocaleString() : undefined },
+            { label: 'Last applied', value: patternDetail.last_applied ? new Date(patternDetail.last_applied).toLocaleString() : undefined },
+          ]}
+        />
+      )}
       <Drawer open={!!detail} position="end" type="overlay" onOpenChange={(_, d) => { if (!d.open) setDetail(null); }} style={{ minWidth: 420, maxWidth: 560 }}>
         <DrawerHeader>
           <DrawerHeaderTitle action={<Button appearance="subtle" aria-label="Close" icon={<Dismiss24Regular />} onClick={() => setDetail(null)} />}>

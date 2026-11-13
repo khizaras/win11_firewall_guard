@@ -43,7 +43,7 @@ const useStyles = makeStyles({
   mono: { fontFamily: 'Consolas, "Cascadia Code", monospace', fontSize: tokens.fontSizeBase100 },
   secondary: { display: 'block', color: tokens.colorNeutralForeground3, fontSize: tokens.fontSizeBase100, marginTop: '3px', lineHeight: 1.4 },
   empty: { padding: '32px', textAlign: 'center', color: tokens.colorNeutralForeground3, fontSize: tokens.fontSizeBase200 },
-  pathCell: { display: 'block', maxWidth: '360px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: tokens.colorNeutralForeground2, fontFamily: 'Consolas, "Cascadia Code", monospace', fontSize: tokens.fontSizeBase100 },
+  pathCell: { display: 'block', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: tokens.colorNeutralForeground2, fontFamily: 'Consolas, "Cascadia Code", monospace', fontSize: tokens.fontSizeBase100 },
 });
 
 /* ---------- basic blocks ---------- */

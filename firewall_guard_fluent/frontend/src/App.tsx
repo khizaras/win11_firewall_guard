@@ -7,7 +7,8 @@ import {
 } from '@fluentui/react-components';
 import {
   ArrowSync24Regular, Checkmark24Regular, Home24Regular, Desktop24Regular, Globe24Regular, DataUsage24Regular,
-  ShieldTask24Regular, History24Regular, ShieldCheckmark24Regular, Settings24Regular, ArrowSwap24Regular,
+  ShieldTask24Regular, History24Regular, ShieldCheckmark24Regular, Settings24Regular, ArrowSwap24Regular, HardDrive24Regular,
+  Storage24Regular, DeveloperBoard24Regular,
   WeatherMoon24Regular, WeatherSunny24Regular, WeatherPartlyCloudyDay24Regular,
 } from '@fluentui/react-icons';
 import { api } from './api';
@@ -18,18 +19,22 @@ import { ProcessesPage } from './pages/ProcessesPage';
 import { ConnectionsPage } from './pages/ConnectionsPage';
 import { TrafficPage } from './pages/TrafficPage';
 import { MonitorPage } from './pages/MonitorPage';
+import { DiskPage, GpuPage, MemoryPage } from './pages/ResourcesPage';
 import { EventsPage } from './pages/EventsPage';
 import { PoliciesPage } from './pages/PoliciesPage';
 import { RulesPage } from './pages/RulesPage';
 import { useTheme, type ThemeMode } from './theme';
 
-type PageId = 'overview' | 'processes' | 'connections' | 'traffic' | 'monitor' | 'events' | 'policies' | 'rules';
+type PageId = 'overview' | 'processes' | 'connections' | 'traffic' | 'monitor' | 'memory' | 'gpu' | 'disk' | 'events' | 'policies' | 'rules';
 const NAV: [PageId, string, React.FC][] = [
   ['overview', 'Overview', Home24Regular],
   ['processes', 'Processes & services', Desktop24Regular],
   ['connections', 'Network connections', Globe24Regular],
   ['traffic', 'Traffic inspector', ArrowSwap24Regular],
   ['monitor', 'System monitor', DataUsage24Regular],
+  ['memory', 'Memory', Storage24Regular],
+  ['gpu', 'GPU', DeveloperBoard24Regular],
+  ['disk', 'Disk', HardDrive24Regular],
   ['events', 'Firewall events', History24Regular],
   ['policies', 'Policy center', ShieldTask24Regular],
   ['rules', 'Managed rules', ShieldCheckmark24Regular],
@@ -180,6 +185,9 @@ export default function App() {
         {page === 'connections' && <ConnectionsPage />}
         {page === 'traffic' && <TrafficPage />}
         {page === 'monitor' && <MonitorPage />}
+        {page === 'memory' && <MemoryPage />}
+        {page === 'gpu' && <GpuPage />}
+        {page === 'disk' && <DiskPage />}
         {page === 'events' && <EventsPage />}
         {page === 'policies' && <PoliciesPage />}
         {page === 'rules' && <RulesPage />}
