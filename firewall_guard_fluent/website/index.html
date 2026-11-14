@@ -2,289 +2,419 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Firewall Guard</title>
-  <meta name="description" content="Firewall Guard is a local Windows console for outbound firewall control, traffic investigation, and hardware monitoring.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#080b0d">
+  <meta name="description" content="Firewall Guard is a local Windows 11 console for firewall control, traffic investigation, managed block rules, and detailed system telemetry.">
+  <meta property="og:title" content="Firewall Guard | Windows firewall control, made visible">
+  <meta property="og:description" content="See the process, understand the connection, and control the firewall decision from one precise Windows console.">
+  <meta property="og:type" content="website">
+  <title>Firewall Guard | Windows firewall control, made visible</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="site.css">
 </head>
 <body>
-  <a class="skip" href="#content">Skip to content</a>
-  <header class="global">
-    <a class="wordmark" href="index.html">
-      <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="#fff" d="M8 1.2 2.2 3.2v4.2c0 3.1 2.1 6 5.8 6.9 3.7-.9 5.8-3.8 5.8-6.9V3.2L8 1.2Z"/></svg>
-      Firewall Guard
-    </a>
-    <button class="menu" type="button" aria-expanded="false">Menu</button>
-    <nav aria-label="Site">
-      <a href="index.html">Overview</a>
-      <a href="features.html">Features</a>
-      <a href="specifications.html">Specifications</a>
-      <a href="operations.html">Operations</a>
-    </nav>
-  </header>
-  <div class="productbar">
-    <strong>Firewall Guard</strong>
-    <div class="links">
-      <a href="index.html" aria-current="page">Overview</a>
-      <a href="features.html">Features</a>
-      <a href="specifications.html">Specifications</a>
-      <a href="operations.html">Operations</a>
-      <a class="cta" href="operations.html">How to run it</a>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <header class="site-header" data-header>
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="Firewall Guard home">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 5 7.5V15c0 7.3 4.5 12.5 11 14.5C22.5 27.5 27 22.3 27 15V7.5L16 3Z" fill="none" stroke="#91f2c7" stroke-width="2" stroke-linejoin="round"/><path d="M11 16h10M16 11v10" stroke="#91f2c7" stroke-width="2" stroke-linecap="round"/></svg>
+        <span>Firewall Guard</span>
+      </a>
+      <nav class="desktop-nav" aria-label="Primary">
+        <a href="index.html" aria-current="page">Overview</a>
+        <a href="features.html">Features</a>
+        <a href="specifications.html">Specifications</a>
+        <a href="operations.html">Operations</a>
+      </nav>
+      <div class="header-actions">
+        <button class="motion-toggle" type="button" data-motion-toggle data-motion-control hidden aria-pressed="false">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 4v12M10 7v6M15 2v16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          <span>Motion</span>
+        </button>
+        <a class="button button-small" href="operations.html">Run the console</a>
+        <details class="mobile-menu">
+          <summary aria-label="Open navigation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></summary>
+          <nav aria-label="Mobile navigation">
+            <a href="index.html" aria-current="page">Overview</a>
+            <a href="features.html">Features</a>
+            <a href="specifications.html">Specifications</a>
+            <a href="operations.html">Operations</a>
+          </nav>
+        </details>
+      </div>
     </div>
-  </div>
+  </header>
 
-  <main id="content">
-    <section class="hero">
-      <h1 class="reveal">Firewall Guard.</h1>
-      <p class="sub reveal">Outbound control for this PC.</p>
-      <p class="fine reveal">Block a service, a program, or a remote address. Then see the process, the traffic, and the hardware behind that decision.</p>
-      <div class="hero-links reveal">
-        <a href="features.html">Explore the features</a>
-        <a href="specifications.html">See the specifications</a>
+  <main id="content" tabindex="-1">
+    <section class="home-hero" data-hero>
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-copy">
+        <p class="eyebrow eyebrow-centered">Firewall Guard for Windows 11</p>
+        <h1 class="hero-title">Every connection.<span>One clear decision.</span></h1>
+        <p class="hero-description">See the process, understand the traffic, and control the firewall from one local console. Built for precise action, not guesswork.</p>
+        <div class="hero-actions">
+          <a class="button" href="features.html">Explore the console<svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a class="button button-on-dark" href="operations.html">How to run it</a>
+        </div>
+        <p class="hero-note">Local API. UAC-controlled changes. No TLS inspection.</p>
       </div>
-      <div class="hero-art float" aria-hidden="true">
-        <svg class="console" viewBox="0 0 980 560">
-          <defs>
-            <filter id="sh" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#000" flood-opacity="0.16"/></filter>
-          </defs>
-          <rect x="40" y="20" width="900" height="500" rx="22" fill="#fff" filter="url(#sh)"/>
-          <rect x="40" y="20" width="210" height="500" rx="22" fill="#f5f5f7"/>
-          <rect x="228" y="20" width="22" height="500" fill="#f5f5f7"/>
-          <text x="64" y="58" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="15" font-weight="650">Firewall Guard</text>
-          <rect x="56" y="82" width="168" height="32" rx="8" fill="#fff"/>
-          <text x="72" y="103" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="13">Overview</text>
-          <text x="72" y="142" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">Processes</text>
-          <text x="72" y="172" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">Connections</text>
-          <text x="72" y="202" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">Traffic</text>
-          <text x="72" y="248" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">Memory</text>
-          <text x="72" y="278" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">GPU</text>
-          <text x="72" y="308" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">Disk</text>
-          <text x="268" y="64" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="26" font-weight="650">Overview</text>
-          <text x="268" y="90" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">Dry-run is on. Windows Firewall is unchanged.</text>
-          <rect x="268" y="116" width="200" height="92" rx="16" fill="#f5f5f7"/>
-          <text x="286" y="148" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="12">Connections</text>
-          <text x="286" y="180" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="28" font-weight="650">128</text>
-          <rect x="484" y="116" width="200" height="92" rx="16" fill="#f5f5f7"/>
-          <text x="502" y="148" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="12">Block rules</text>
-          <text x="502" y="180" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="28" font-weight="650">24</text>
-          <rect x="700" y="116" width="200" height="92" rx="16" fill="#f5f5f7"/>
-          <text x="718" y="148" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="12">Memory</text>
-          <text x="718" y="180" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="28" font-weight="650">61%</text>
-          <rect x="268" y="228" width="632" height="250" rx="16" fill="#fbfbfd"/>
-          <path d="M290 400 C 360 390, 400 300, 470 310 S 560 360, 640 280 760 250 860 220" fill="none" stroke="#0071e3" stroke-width="3"/>
-          <path d="M290 410 C 380 400, 430 360, 520 350 S 650 390, 760 340 840 360 870 330" fill="none" stroke="#30b04a" stroke-width="3"/>
-          <text x="290" y="258" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="14" font-weight="650">Last two minutes</text>
-        </svg>
-      </div>
-    </section>
 
-    <section class="scrub" data-scrub>
-      <div class="scrub-sticky">
-        <div>
-          <p class="kicker">How a block works</p>
-          <h2 data-title>Select the rows.</h2>
-          <p class="detail" data-detail>Services, programs, and remote addresses can share one batch. The console groups them before anything is sent.</p>
-          <div class="steps-inline" role="tablist" aria-label="Block sequence">
-            <button type="button" data-go="0" aria-current="true" aria-label="Select the rows"></button>
-            <button type="button" data-go="1" aria-label="Confirm the batch"></button>
-            <button type="button" data-go="2" aria-label="Approve once"></button>
-            <button type="button" data-go="3" aria-label="Each rule is verified"></button>
+      <div class="hero-scene">
+        <div class="console-frame" aria-hidden="true">
+          <div class="console-chrome">
+            <div class="window-dots"><i></i><i></i><i></i></div>
+            <span class="console-chrome-title">Firewall Guard · Network connections</span>
+            <span class="console-chrome-status"><i class="status-dot"></i>Local session</span>
+          </div>
+          <div class="console-body">
+            <aside class="console-sidebar">
+              <div class="console-brand"><svg viewBox="0 0 24 24"><path d="M12 2 4 5.5v6c0 5.3 3.3 9 8 10.5 4.7-1.5 8-5.2 8-10.5v-6L12 2Z" fill="none" stroke="#43c994" stroke-width="1.6"/></svg>Firewall Guard</div>
+              <p class="console-nav-label">Home</p>
+              <div class="console-nav-item">Overview</div>
+              <p class="console-nav-label">Protection</p>
+              <div class="console-nav-item">Processes &amp; services</div>
+              <div class="console-nav-item">Firewall events</div>
+              <div class="console-nav-item">Managed rules</div>
+              <p class="console-nav-label">Network</p>
+              <div class="console-nav-item active">Connections</div>
+              <div class="console-nav-item">Traffic inspector</div>
+              <p class="console-nav-label">Performance</p>
+              <div class="console-nav-item">System monitor</div>
+              <div class="console-nav-item">Memory</div>
+              <div class="console-nav-item">GPU</div>
+              <div class="console-nav-item">Disk</div>
+            </aside>
+            <div class="console-main">
+              <div class="console-heading-row">
+                <div><h2>Network connections</h2><p>Current TCP and UDP sockets, with their owning process.</p></div>
+                <span class="console-live-badge"><i class="status-dot"></i>Snapshot refreshed</span>
+              </div>
+              <div class="console-metrics">
+                <div class="console-metric"><span>Active sockets</span><strong>128</strong></div>
+                <div class="console-metric"><span>Managed rules</span><strong>24</strong></div>
+                <div class="console-metric"><span>Selected targets</span><strong>03</strong></div>
+              </div>
+              <div class="console-table">
+                <div class="console-table-head"><span>Process</span><span>Remote address</span><span>Protocol</span><span>State</span></div>
+                <div class="console-table-row selected"><span class="process-name"><i class="process-icon">ME</i>msedge.exe</span><span class="mono">203.0.113.10:443</span><span>TCP</span><span class="table-status">Established</span></div>
+                <div class="console-table-row selected"><span class="process-name"><i class="process-icon">SV</i>svchost.exe</span><span class="mono">203.0.113.22:443</span><span>TCP</span><span class="table-status">Established</span></div>
+                <div class="console-table-row selected"><span class="process-name"><i class="process-icon">UP</i>updater.exe</span><span class="mono">203.0.113.44:80</span><span>TCP</span><span class="table-status">Established</span></div>
+                <div class="console-table-row"><span class="process-name"><i class="process-icon">SY</i>System</span><span class="mono">0.0.0.0:135</span><span>TCP</span><span>Listen</span></div>
+              </div>
+              <div class="console-actionbar"><span><strong>3 targets selected</strong> · Distinct remote addresses</span><span class="console-action">Review batch</span></div>
+            </div>
           </div>
         </div>
-        <div class="stage-card" data-step="0" aria-hidden="true">
-          <svg class="console" viewBox="0 0 640 420">
-            <rect width="640" height="420" rx="18" fill="#0c0c0e"/>
-            <text x="28" y="42" fill="#f5f5f7" font-family="Segoe UI, sans-serif" font-size="16" font-weight="650">Batch</text>
-            <g class="layer s0">
-              <rect x="28" y="68" width="584" height="64" rx="12" fill="#1c1c1e"/>
-              <rect x="48" y="90" width="18" height="18" rx="4" fill="#0071e3"/>
-              <text x="84" y="106" fill="#f5f5f7" font-family="Segoe UI, sans-serif" font-size="15">wuauserv</text>
-              <text x="430" y="106" fill="#a1a1a6" font-family="Segoe UI, sans-serif" font-size="13">Service</text>
-              <rect x="28" y="144" width="584" height="64" rx="12" fill="#1c1c1e"/>
-              <rect x="48" y="166" width="18" height="18" rx="4" fill="#0071e3"/>
-              <text x="84" y="182" fill="#f5f5f7" font-family="Segoe UI, sans-serif" font-size="15">updater.exe</text>
-              <text x="430" y="182" fill="#a1a1a6" font-family="Segoe UI, sans-serif" font-size="13">Program</text>
-              <rect x="28" y="220" width="584" height="64" rx="12" fill="#1c1c1e"/>
-              <rect x="48" y="242" width="18" height="18" rx="4" fill="#0071e3"/>
-              <text x="84" y="258" fill="#f5f5f7" font-family="Segoe UI, sans-serif" font-size="15">203.0.113.44</text>
-              <text x="430" y="258" fill="#a1a1a6" font-family="Segoe UI, sans-serif" font-size="13">Address</text>
-              <rect x="28" y="320" width="160" height="40" rx="980" fill="#0071e3"/>
-              <text x="52" y="346" fill="#fff" font-family="Segoe UI, sans-serif" font-size="14">Block 3 selected</text>
-            </g>
-            <g class="layer s1">
-              <rect x="70" y="70" width="500" height="280" rx="18" fill="#1d1d1f" stroke="#3a3a3c"/>
-              <text x="98" y="118" fill="#f5f5f7" font-family="Segoe UI, sans-serif" font-size="22" font-weight="650">Block 3 targets?</text>
-              <text x="98" y="156" fill="#a1a1a6" font-family="Segoe UI, sans-serif" font-size="14">1 service, 1 program, 1 address</text>
-              <text x="98" y="196" fill="#d2d2d7" font-family="Segoe UI, sans-serif" font-size="15">Dry-run will log this and change nothing.</text>
-              <rect x="98" y="250" width="120" height="40" rx="980" fill="#3a3a3c"/>
-              <text x="128" y="276" fill="#fff" font-family="Segoe UI, sans-serif" font-size="14">Cancel</text>
-              <rect x="232" y="250" width="140" height="40" rx="980" fill="#0071e3"/>
-              <text x="268" y="276" fill="#fff" font-family="Segoe UI, sans-serif" font-size="14">Continue</text>
-            </g>
-            <g class="layer s2">
-              <rect x="120" y="80" width="400" height="250" rx="16" fill="#f5f5f7"/>
-              <text x="148" y="130" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="18" font-weight="650">Windows needs approval</text>
-              <text x="148" y="168" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="14">One prompt covers this entire batch.</text>
-              <rect x="148" y="220" width="150" height="40" rx="8" fill="#0071e3"/>
-              <text x="186" y="246" fill="#fff" font-family="Segoe UI, sans-serif" font-size="14">Approve</text>
-            </g>
-            <g class="layer s3">
-              <text x="28" y="78" fill="#a1a1a6" font-family="Segoe UI, sans-serif" font-size="13">FGF- rules</text>
-              <rect x="28" y="98" width="584" height="58" rx="12" fill="#1c1c1e"/>
-              <text x="48" y="133" fill="#f5f5f7" font-family="ui-monospace, monospace" font-size="14">FGF-svc-wuauserv</text>
-              <rect x="470" y="114" width="110" height="26" rx="8" fill="#16381c"/>
-              <text x="492" y="132" fill="#6bdc7a" font-family="Segoe UI, sans-serif" font-size="13">Verified</text>
-              <rect x="28" y="168" width="584" height="58" rx="12" fill="#1c1c1e"/>
-              <text x="48" y="203" fill="#f5f5f7" font-family="ui-monospace, monospace" font-size="14">FGF-app-updater</text>
-              <rect x="470" y="184" width="110" height="26" rx="8" fill="#16381c"/>
-              <text x="492" y="202" fill="#6bdc7a" font-family="Segoe UI, sans-serif" font-size="13">Verified</text>
-              <rect x="28" y="238" width="584" height="58" rx="12" fill="#1c1c1e"/>
-              <text x="48" y="273" fill="#f5f5f7" font-family="ui-monospace, monospace" font-size="14">FGF-ip-203.0.113.44</text>
-              <rect x="470" y="254" width="110" height="26" rx="8" fill="#16381c"/>
-              <text x="492" y="272" fill="#6bdc7a" font-family="Segoe UI, sans-serif" font-size="13">Verified</text>
-              <text x="28" y="350" fill="#a1a1a6" font-family="Segoe UI, sans-serif" font-size="14">Checked with Get-NetFirewallRule. Logged on this PC.</text>
-            </g>
-          </svg>
+        <div class="floating-proof floating-proof-one" aria-hidden="true">
+          <svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="16" fill="rgba(145,242,199,.12)"/><path d="m11 18 5 5 10-11" fill="none" stroke="#91f2c7" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><strong>3 rules verified</strong><span>Get-NetFirewallRule</span></div>
+        </div>
+        <div class="floating-proof floating-proof-two" aria-hidden="true">
+          <svg viewBox="0 0 36 36"><rect x="7" y="14" width="22" height="17" rx="5" fill="rgba(139,200,245,.12)"/><path d="M12 14V9a6 6 0 0 1 12 0v5" fill="none" stroke="#8bc8f5" stroke-width="2"/><path d="M18 20v5" stroke="#8bc8f5" stroke-width="2" stroke-linecap="round"/></svg>
+          <div><strong>127.0.0.1 only</strong><span>Local API boundary</span></div>
+        </div>
+        <p class="scene-caption">Product illustration. Values and addresses are illustrative, not a live feed.</p>
+      </div>
+    </section>
+
+    <section class="proof-strip" aria-label="Product principles">
+      <div class="container-wide proof-grid" data-reveal-group>
+        <div class="proof-item" data-reveal style="--reveal-delay:0ms"><strong>Local by design</strong><span>The API binds to 127.0.0.1, not a public interface.</span></div>
+        <div class="proof-item" data-reveal style="--reveal-delay:70ms"><strong>Block-only actions</strong><span>The managed workflow creates block rules, never allow rules.</span></div>
+        <div class="proof-item" data-reveal style="--reveal-delay:130ms"><strong>Elevation stays visible</strong><span>Live firewall changes require Windows approval.</span></div>
+        <div class="proof-item" data-reveal style="--reveal-delay:190ms"><strong>Evidence over inference</strong><span>No TLS content inspection and no invented packet detail.</span></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container intro-statement">
+        <div data-reveal>
+          <p class="eyebrow">Operational clarity</p>
+          <h2 class="display-lg">From signal to action. Without losing the context.</h2>
+        </div>
+        <div data-reveal style="--reveal-delay:120ms">
+          <p class="body-copy">Processes, services, sockets, firewall events, managed rules, and hardware telemetry share one workspace. Investigate the evidence first. Make the change second.</p>
+          <a class="text-link" href="features.html">See every feature<svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
       </div>
     </section>
 
-    <section class="chapter stage">
-      <div class="center narrow reveal">
-        <h2 class="display">The machine, in three pages.</h2>
-        <p class="lede">Memory, GPU, and disk each have a page. Used, available, and free. Then the applications holding that resource.</p>
-      </div>
-      <div class="tiles wide">
-        <article class="tile reveal">
-          <h3>Memory.</h3>
-          <p>Working set, standby Windows can reclaim, and memory that is actually free.</p>
-          <svg class="art" viewBox="0 0 280 180" aria-hidden="true">
-            <circle cx="90" cy="96" r="58" fill="none" stroke="#e8e8ed" stroke-width="16"/>
-            <circle cx="90" cy="96" r="58" fill="none" stroke="#0071e3" stroke-width="16" stroke-dasharray="250 364" stroke-linecap="round" transform="rotate(-90 90 96)"/>
-            <text x="168" y="78" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">Used</text>
-            <text x="168" y="106" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="28" font-weight="650">58 GB</text>
-            <text x="168" y="132" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">3.4 GB free</text>
-          </svg>
-        </article>
-        <article class="tile reveal">
-          <h3>GPU.</h3>
-          <p>Engine use and dedicated memory. NVIDIA totals when the driver is there. Windows counters for each app.</p>
-          <svg class="art" viewBox="0 0 280 180" aria-hidden="true">
-            <rect x="36" y="48" width="150" height="100" rx="16" fill="#1d1d1f"/>
-            <rect x="52" y="64" width="118" height="46" rx="8" fill="#2c2c2e"/>
-            <rect x="60" y="74" width="70" height="8" rx="4" fill="#0071e3"/>
-            <text x="60" y="128" fill="#f5f5f7" font-family="Segoe UI, sans-serif" font-size="13">96% engine</text>
-            <text x="200" y="90" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="22" font-weight="650">26 GB</text>
-            <text x="200" y="112" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="12">in use</text>
-          </svg>
-        </article>
-        <article class="tile reveal">
-          <h3>Disk.</h3>
-          <p>Free space on each volume, then the processes reading and writing. Ending one closes the app. It does not delete files.</p>
-          <svg class="art" viewBox="0 0 280 180" aria-hidden="true">
-            <text x="24" y="58" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="14" font-weight="650">C:</text>
-            <rect x="24" y="70" width="230" height="14" rx="7" fill="#e8e8ed"/>
-            <rect x="24" y="70" width="150" height="14" rx="7" fill="#0071e3"/>
-            <text x="24" y="112" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">Read 19 MB/s</text>
-            <text x="140" y="112" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="13">Write 1.1 MB/s</text>
-            <rect x="24" y="128" width="230" height="28" rx="8" fill="#f5f5f7"/>
-            <text x="36" y="147" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="13">python.exe</text>
-          </svg>
-        </article>
+    <section class="workflow-section" data-workflow>
+      <div class="workflow-sticky">
+        <div class="container-wide">
+          <div class="workflow-header" data-reveal>
+            <div><p class="eyebrow eyebrow-on-dark">The block workflow</p><h2 class="display-md">Four deliberate steps.<br>One accountable change.</h2></div>
+            <p class="lede">Scroll through the workflow, or choose a step. Every stage preserves the target, the intent, and the result.</p>
+          </div>
+          <div class="workflow-tabs" data-workflow-tabs aria-label="Block workflow steps">
+            <button class="workflow-tab" type="button" data-workflow-tab>01 · Select</button>
+            <button class="workflow-tab" type="button" data-workflow-tab>02 · Review</button>
+            <button class="workflow-tab" type="button" data-workflow-tab>03 · Elevate</button>
+            <button class="workflow-tab" type="button" data-workflow-tab>04 · Verify</button>
+          </div>
+          <div class="workflow-panels">
+            <article class="workflow-panel is-active" data-workflow-panel>
+              <div class="workflow-panel-copy">
+                <span class="step-number">01 / SELECT</span>
+                <h3>Start with the evidence.</h3>
+                <p>Select applications, services, or distinct remote addresses from the same operational table. Filters narrow the view without discarding the selection.</p>
+                <div class="workflow-fact"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10 4 4 8-9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Mixed target types can share one review batch.</span></div>
+              </div>
+              <div class="workflow-screen" aria-hidden="true">
+                <div class="screen-topline"><strong>Network connections</strong><span class="screen-chip"><i class="status-dot"></i>3 selected</span></div>
+                <div class="selection-list">
+                  <div class="selection-row selected"><span class="selection-check"><svg viewBox="0 0 16 16"><path d="m3 8 3 3 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><span class="selection-name"><strong>wuauserv</strong><span>Windows service · C:\Windows\system32\svchost.exe</span></span><span class="selection-type">Service</span></div>
+                  <div class="selection-row selected"><span class="selection-check"><svg viewBox="0 0 16 16"><path d="m3 8 3 3 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><span class="selection-name"><strong>updater.exe</strong><span>PID 24816 · Signature available</span></span><span class="selection-type">Program</span></div>
+                  <div class="selection-row selected"><span class="selection-check"><svg viewBox="0 0 16 16"><path d="m3 8 3 3 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><span class="selection-name"><strong class="mono">203.0.113.44</strong><span>Remote endpoint · TCP 443</span></span><span class="selection-type">Address</span></div>
+                </div>
+                <div class="screen-footer"><span>3 distinct targets</span><span class="screen-button">Review batch</span></div>
+              </div>
+            </article>
+
+            <article class="workflow-panel" data-workflow-panel>
+              <div class="workflow-panel-copy">
+                <span class="step-number">02 / REVIEW</span>
+                <h3>See the whole batch.</h3>
+                <p>Confirm every target, the direction, and the protocol before elevation. Dry-run mode can record block intent without creating firewall rules.</p>
+                <div class="workflow-fact"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m0 0 4-4m-4 4L6 9M4 17h12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Up to 50 targets per batch creation request.</span></div>
+              </div>
+              <div class="workflow-screen" aria-hidden="true">
+                <div class="screen-topline"><strong>Review block request</strong><span>Nothing elevated yet</span></div>
+                <div class="batch-summary">
+                  <div class="batch-summary-title"><strong>3 targets</strong><span>Ready for review</span></div>
+                  <div class="batch-line"><span>Service</span><strong>wuauserv</strong></div>
+                  <div class="batch-line"><span>Program</span><strong>updater.exe</strong></div>
+                  <div class="batch-line"><span>Remote address</span><strong class="mono">203.0.113.44</strong></div>
+                  <div class="batch-line"><span>Direction / protocol</span><strong>Outbound · Any</strong></div>
+                  <div class="batch-note"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 9v5M10 6.2v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Check the active dry-run mode in the console before continuing. Removal is a separate live administrative action.</span></div>
+                </div>
+              </div>
+            </article>
+
+            <article class="workflow-panel" data-workflow-panel>
+              <div class="workflow-panel-copy">
+                <span class="step-number">03 / ELEVATE</span>
+                <h3>Approve at the boundary.</h3>
+                <p>Live rule creation crosses the Windows security boundary through UAC. Observation stays separate from administrative change.</p>
+                <div class="workflow-fact"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2 4 4.5V9c0 4 2.5 7 6 8.5C13.5 16 16 13 16 9V4.5L10 2Z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 6v5M10 14v.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>One elevated process handles a manual batch creation.</span></div>
+              </div>
+              <div class="workflow-screen" aria-hidden="true">
+                <div class="screen-topline"><strong>Windows security boundary</strong><span>User approval required</span></div>
+                <div class="elevation-scene">
+                  <div class="elevation-card">
+                    <div class="elevation-icon"><svg viewBox="0 0 32 32"><path d="M16 3 6 7v8c0 6.5 4 11.5 10 14 6-2.5 10-7.5 10-14V7L16 3Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 10v7M16 22v.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+                    <h4>Allow Firewall Guard to make changes?</h4>
+                    <p>Windows is requesting administrator approval for this firewall batch.</p>
+                    <div class="elevation-detail">3 block rules · Outbound · Group: Firewall Guard Fluent</div>
+                    <div class="elevation-actions"><span>Cancel</span><span>Approve</span></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="workflow-panel" data-workflow-panel>
+              <div class="workflow-panel-copy">
+                <span class="step-number">04 / VERIFY</span>
+                <h3>Confirm what changed.</h3>
+                <p>Created rules are checked with Get-NetFirewallRule and recorded in the local managed-rule ledger. Per-target outcomes remain visible.</p>
+                <div class="workflow-fact"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m4 10 4 4 8-9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Managed names use the FGF- prefix for identification.</span></div>
+              </div>
+              <div class="workflow-screen" aria-hidden="true">
+                <div class="screen-topline"><strong>Batch result</strong><span class="screen-chip">3 verified</span></div>
+                <div class="verification-list">
+                  <div class="verification-row"><span class="verification-check"><svg viewBox="0 0 16 16"><path d="m3 8 3 3 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><span class="verification-name"><strong class="mono">FGF-svc-wuauserv</strong><span>Outbound · Block · Enabled</span></span><span class="verification-status">Verified</span></div>
+                  <div class="verification-row"><span class="verification-check"><svg viewBox="0 0 16 16"><path d="m3 8 3 3 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><span class="verification-name"><strong class="mono">FGF-app-updater</strong><span>Outbound · Block · Enabled</span></span><span class="verification-status">Verified</span></div>
+                  <div class="verification-row"><span class="verification-check"><svg viewBox="0 0 16 16"><path d="m3 8 3 3 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><span class="verification-name"><strong class="mono">FGF-ip-203.0.113.44</strong><span>Outbound · Block · Enabled</span></span><span class="verification-status">Verified</span></div>
+                </div>
+                <div class="verification-log"><span>✓</span> Get-NetFirewallRule returned each expected rule<br><span>✓</span> Managed-rule ledger updated locally<br><span>✓</span> Activity recorded on this PC</div>
+              </div>
+            </article>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="chapter">
-      <div class="pair">
-        <div class="copy reveal">
-          <h2>Traffic, with a name beside it.</h2>
-          <p>Live firewall events sit next to current sockets. A remote name comes from the Windows DNS cache. The console does not look inside TLS.</p>
-          <p>A pattern such as <code>*microsoft.com*</code> resolves to addresses, and those addresses become block rules.</p>
+    <section class="section section-soft" data-network-scene>
+      <div class="container-wide network-grid">
+        <div class="network-copy" data-reveal>
+          <p class="eyebrow">Traffic inspector</p>
+          <h2 class="display-md">A connection is more than an address.</h2>
+          <p class="lede">See the owning process, socket state, protocol, and remote endpoint together. Add recent firewall events and DNS-cache names when Windows makes them available.</p>
+          <p class="body-copy">Firewall Guard correlates snapshots and event data. It does not decrypt TLS or claim to know the contents of a session.</p>
+          <a class="text-link" href="features.html#network">Explore network visibility<svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </div>
-        <div class="frame reveal" aria-hidden="true">
-          <svg viewBox="0 0 520 340">
-            <rect width="520" height="340" rx="8" fill="#f5f5f7"/>
-            <circle cx="90" cy="170" r="36" fill="#fff"/>
-            <text x="74" y="176" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="13" font-weight="650">PC</text>
-            <path d="M130 170 C 200 80, 280 80, 360 150" fill="none" stroke="#0071e3" stroke-width="2"/>
-            <path d="M130 176 C 210 240, 300 250, 370 190" fill="none" stroke="#86868b" stroke-width="2"/>
-            <circle cx="390" cy="146" r="28" fill="#fff"/>
-            <text x="372" y="151" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="11">edge</text>
-            <rect x="300" y="210" width="180" height="70" rx="14" fill="#fff"/>
-            <text x="316" y="240" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="13" font-weight="650">update.example</text>
-            <text x="316" y="260" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="12">from the DNS cache</text>
+        <div class="network-map" data-reveal="scale" aria-hidden="true">
+          <div class="network-map-header"><strong>Connection map</strong><span>Current snapshot · Localhost</span></div>
+          <svg class="network-svg" viewBox="0 0 720 500">
+            <defs>
+              <radialGradient id="pc-fill"><stop stop-color="#213c31"/><stop offset="1" stop-color="#101916"/></radialGradient>
+              <filter id="node-glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="10" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <path class="network-path" data-draw-path d="M310 242C225 180 188 130 132 112"/>
+            <path class="network-path" data-draw-path d="M398 222C465 148 516 118 586 108"/>
+            <path class="network-path network-path-muted" data-draw-path d="M402 294C478 330 518 372 580 396"/>
+            <path class="network-path network-path-muted" data-draw-path d="M308 298C230 342 198 382 128 398"/>
+            <path class="network-path flow-path" d="M310 242C225 180 188 130 132 112"/>
+            <path class="network-path flow-path" d="M398 222C465 148 516 118 586 108"/>
+            <circle class="signal-ring" cx="354" cy="258" r="92" fill="none" stroke="rgba(145,242,199,.12)" stroke-width="1"/>
+            <circle class="signal-ring" cx="354" cy="258" r="72" fill="none" stroke="rgba(145,242,199,.18)" stroke-width="1" style="animation-delay:.6s"/>
+            <circle cx="354" cy="258" r="58" fill="url(#pc-fill)" stroke="#4e8b70" stroke-width="1.5"/>
+            <path d="M354 225 334 233v15c0 14 8 24 20 29 12-5 20-15 20-29v-15l-20-8Z" fill="none" stroke="#91f2c7" stroke-width="2"/>
+            <path d="M345 250h18M354 241v18" stroke="#91f2c7" stroke-width="2" stroke-linecap="round"/>
+            <text class="map-label" x="354" y="338" text-anchor="middle">This Windows PC</text>
+            <text class="map-label-muted" x="354" y="358" text-anchor="middle">127.0.0.1</text>
+            <g filter="url(#node-glow)"><circle cx="126" cy="108" r="5" fill="#91f2c7"/><circle cx="590" cy="106" r="5" fill="#91f2c7"/></g>
+            <g><rect x="52" y="42" width="160" height="48" rx="12" fill="#131d19" stroke="#29493a"/><text class="map-label" x="68" y="64">msedge.exe</text><text class="map-label-muted" x="68" y="81">PID 18420 · TCP</text></g>
+            <g><rect x="520" y="40" width="160" height="48" rx="12" fill="#131d19" stroke="#29493a"/><text class="map-label" x="536" y="62">update.example</text><text class="map-label-muted" x="536" y="79">203.0.113.10</text></g>
+            <g><rect x="500" y="394" width="172" height="52" rx="12" fill="#11191b" stroke="#293237"/><text class="map-label" x="516" y="416">svchost.exe</text><text class="map-label-muted" x="516" y="434">203.0.113.22:443</text></g>
+            <g><rect x="44" y="396" width="172" height="52" rx="12" fill="#11191b" stroke="#293237"/><text class="map-label" x="60" y="418">updater.exe</text><text class="map-label-muted" x="60" y="436">203.0.113.44:443</text></g>
+            <text class="map-label-small" x="126" y="130" text-anchor="middle">Owning process</text>
+            <text class="map-label-small" x="590" y="128" text-anchor="middle">DNS-cache name</text>
           </svg>
+          <div class="map-legend"><span><i></i>Selected connection</span><span><i></i>DNS enrichment</span><span>Illustrative endpoints</span></div>
         </div>
       </div>
     </section>
 
-    <section class="chapter black">
-      <div class="center narrow reveal">
-        <h2 class="display">Dry-run first.</h2>
-        <p class="lede">The default records what you meant to block. Windows Firewall stays as it is until you turn live mode on and approve the prompt.</p>
+    <section class="section section-white">
+      <div class="container-wide">
+        <div class="section-heading" data-reveal>
+          <div><p class="eyebrow">System telemetry</p><h2 class="display-md">The machine behind the traffic.</h2></div>
+          <p class="body-copy">CPU, memory, network, disk, and GPU telemetry live beside the firewall workflow. Move from a connection to the process, then to the resource pressure it creates.</p>
+        </div>
+        <div class="resource-grid">
+          <article class="resource-card" data-reveal style="--reveal-delay:0ms">
+            <h3>Memory, explained.</h3>
+            <p>Working set, available memory, standby, and per-process pressure in one view.</p>
+            <div class="resource-art" aria-hidden="true">
+              <svg viewBox="0 0 340 250">
+                <circle cx="112" cy="120" r="76" fill="none" stroke="#e4eae6" stroke-width="20"/>
+                <circle cx="112" cy="120" r="76" fill="none" stroke="#43c994" stroke-width="20" stroke-linecap="round" stroke-dasharray="330 478" transform="rotate(-90 112 120)"/>
+                <text x="112" y="114" text-anchor="middle" fill="#111719" font-family="Segoe UI" font-size="30" font-weight="650">61%</text>
+                <text class="chart-label" x="112" y="140" text-anchor="middle">in use</text>
+                <text class="chart-label" x="218" y="78">Working set</text><text x="218" y="106" fill="#111719" font-family="Segoe UI" font-size="22" font-weight="650">58 GB</text>
+                <text class="chart-label" x="218" y="150">Available</text><text x="218" y="176" fill="#111719" font-family="Segoe UI" font-size="18" font-weight="600">36.4 GB</text>
+                <text class="chart-label" x="218" y="214">Per-process detail included</text>
+              </svg>
+            </div>
+          </article>
+          <article class="resource-card" data-reveal style="--reveal-delay:90ms">
+            <h3>Live system rhythm.</h3>
+            <p>CPU, per-core load, memory, network, and disk sampled every few seconds.</p>
+            <div class="resource-art" aria-hidden="true">
+              <svg viewBox="0 0 360 250">
+                <path class="chart-grid" d="M20 42H340M20 94H340M20 146H340M20 198H340"/>
+                <path d="M20 194C48 180 66 188 90 154S132 88 156 112 192 178 218 126 252 54 278 86 312 132 340 62V224H20Z" fill="rgba(67,201,148,.09)"/>
+                <path class="chart-line" d="M20 194C48 180 66 188 90 154S132 88 156 112 192 178 218 126 252 54 278 86 312 132 340 62"/>
+                <path class="chart-line chart-line-sky" d="M20 210C60 198 74 208 108 184S148 172 180 182 220 154 252 166 306 118 340 130" opacity=".75"/>
+                <circle cx="340" cy="62" r="6" fill="#43c994"/>
+                <text class="chart-label" x="20" y="24">CPU and memory · recent samples</text>
+              </svg>
+            </div>
+          </article>
+          <article class="resource-card" data-reveal style="--reveal-delay:180ms">
+            <h3>GPU and disk, in context.</h3>
+            <p>Adapter utilization, dedicated memory, volume capacity, and per-process disk rates.</p>
+            <div class="resource-art" aria-hidden="true">
+              <svg viewBox="0 0 340 250">
+                <rect x="24" y="32" width="292" height="80" rx="16" fill="#18231e" stroke="#2b3a32"/>
+                <text class="chart-label chart-label-dark" x="44" y="60">GPU ENGINE</text><text x="44" y="94" fill="#f4f8f6" font-family="Segoe UI" font-size="28" font-weight="650">72%</text>
+                <rect x="142" y="70" width="150" height="8" rx="4" fill="#2c3932"/><rect x="142" y="70" width="108" height="8" rx="4" fill="#91f2c7"/>
+                <text class="chart-label chart-label-dark" x="24" y="150">C: · SYSTEM VOLUME</text><rect x="24" y="166" width="292" height="12" rx="6" fill="#29332e"/><rect x="24" y="166" width="190" height="12" rx="6" fill="#8bc8f5"/>
+                <text x="24" y="214" fill="#f4f8f6" font-family="Segoe UI" font-size="18" font-weight="600">Read 19 MB/s</text><text class="chart-label chart-label-dark" x="210" y="214">Write 1.1 MB/s</text>
+              </svg>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
 
-    <section class="chapter">
-      <div class="center narrow reveal">
-        <h2 class="display">Get the highlights.</h2>
-      </div>
-      <div class="hscroll-wrap">
-        <div class="hscroll">
-          <article class="card">
-            <h3>Processes and services.</h3>
-            <p>Status, start mode, path, and a detail drawer with signer and command line when Windows can provide them.</p>
-            <svg class="art" viewBox="0 0 300 140" aria-hidden="true">
-              <rect x="0" y="10" width="280" height="28" rx="6" fill="#fff"/>
-              <rect x="0" y="46" width="280" height="28" rx="6" fill="#fff"/>
-              <rect x="0" y="82" width="280" height="28" rx="6" fill="#fff"/>
-              <circle cx="16" cy="24" r="5" fill="#30b04a"/>
-              <circle cx="16" cy="60" r="5" fill="#86868b"/>
-              <circle cx="16" cy="96" r="5" fill="#30b04a"/>
-              <text x="32" y="28" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="12">WinDefend</text>
-              <text x="32" y="64" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="12">wuauserv</text>
-              <text x="32" y="100" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="12">DiagTrack</text>
-            </svg>
-          </article>
-          <article class="card">
-            <h3>One table language.</h3>
-            <p>Sort any column. Filter each column. Open a row for the details. The same behavior on every page.</p>
-            <svg class="art" viewBox="0 0 300 140" aria-hidden="true">
-              <rect width="280" height="120" rx="12" fill="#fff"/>
-              <text x="16" y="28" fill="#6e6e73" font-family="Segoe UI, sans-serif" font-size="11">Application</text>
-              <text x="150" y="28" fill="#0071e3" font-family="Segoe UI, sans-serif" font-size="11">Working set</text>
-              <text x="16" y="58" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="13">python.exe</text>
-              <text x="150" y="58" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="13">40.7 GB</text>
-              <text x="16" y="88" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="13">ComfyUI</text>
-              <text x="150" y="88" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="13">1.3 GB</text>
-            </svg>
-          </article>
-          <article class="card">
-            <h3>Only your rules.</h3>
-            <p>Removal is limited to the FGF- group this console created. Other products keep their own blocks.</p>
-            <svg class="art" viewBox="0 0 300 140" aria-hidden="true">
-              <rect width="250" height="36" rx="10" fill="#fff"/>
-              <text x="14" y="23" fill="#1d1d1f" font-family="ui-monospace, monospace" font-size="12">FGF-svc-diagtrack</text>
-              <rect y="48" width="250" height="36" rx="10" fill="#fff"/>
-              <text x="14" y="71" fill="#86868b" font-family="Segoe UI, sans-serif" font-size="12">Other vendors stay</text>
-            </svg>
-          </article>
-          <article class="card">
-            <h3>Local, on purpose.</h3>
-            <p>The API listens on 127.0.0.1. It does not decrypt traffic or prove what left the machine.</p>
-            <svg class="art" viewBox="0 0 300 140" aria-hidden="true">
-              <rect x="70" y="20" width="140" height="90" rx="16" fill="#fff"/>
-              <text x="92" y="72" fill="#1d1d1f" font-family="Segoe UI, sans-serif" font-size="16" font-weight="650">127.0.0.1</text>
-            </svg>
-          </article>
+    <section class="section section-dark">
+      <div class="container-wide domain-layout">
+        <div data-reveal>
+          <p class="eyebrow eyebrow-on-dark">Wildcard domain rules</p>
+          <h2 class="display-md">From a name pattern to a reviewed address set.</h2>
+          <p class="lede">Match names from the Windows DNS cache and resolve candidates with Resolve-DnsName. Review the resulting addresses before applying block rules.</p>
+          <p class="body-copy">An optional elevated worker can refresh enabled patterns about every five minutes. Blocking applies to resolved addresses, not encrypted names inside a session.</p>
         </div>
+        <div class="domain-visual" data-reveal="scale" aria-hidden="true">
+          <div class="domain-query"><code>*example.com*</code><span>Enabled pattern</span></div>
+          <div class="domain-connector"></div>
+          <div class="resolve-list">
+            <div class="resolve-row"><div><strong>update.example.com</strong><span>203.0.113.10</span></div><span class="resolve-status">Resolved</span></div>
+            <div class="resolve-row"><div><strong>cdn.example.com</strong><span>203.0.113.22</span></div><span class="resolve-status">Resolved</span></div>
+            <div class="resolve-row"><div><strong>api.example.com</strong><span>203.0.113.44</span></div><span class="resolve-status">Resolved</span></div>
+          </div>
+          <p class="domain-footnote">Review additions and removals before applying. Illustrative addresses only.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-white">
+      <div class="container-wide rules-layout">
+        <div data-reveal>
+          <p class="eyebrow">Managed rules</p>
+          <h2 class="display-md">Know what changed. Keep the evidence.</h2>
+          <p class="lede">The managed-rule ledger sits beside the live Windows firewall inventory, so intended changes and observed rules are both available for inspection.</p>
+          <p class="body-copy">FGF- prefixes identify managed names. Rule removal is an administrative operation; review the target and active mode carefully.</p>
+          <a class="text-link" href="features.html#rules">Explore rule management<svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+        <div class="rule-ledger" data-reveal="scale" aria-hidden="true">
+          <div class="ledger-header"><strong>Managed rules</strong><span>Local SQLite ledger</span></div>
+          <div class="ledger-row"><div><code>FGF-svc-wuauserv</code><small>Service · Outbound · Any protocol</small></div><span class="ledger-badge">✓ Verified</span></div>
+          <div class="ledger-row"><div><code>FGF-app-updater</code><small>Program · Outbound · Any protocol</small></div><span class="ledger-badge">✓ Verified</span></div>
+          <div class="ledger-row"><div><code>FGF-ip-203.0.113.44</code><small>Remote address · Outbound · TCP</small></div><span class="ledger-badge">✓ Verified</span></div>
+          <div class="ledger-footer"><svg viewBox="0 0 20 20"><path d="M10 2 4 4.5V9c0 4 2.5 7 6 8.5C13.5 16 16 13 16 9V4.5L10 2Z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m7 10 2 2 4-5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span>Live inventory and app-managed history remain separate views.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark">
+      <div class="container-wide">
+        <div class="centered" data-reveal>
+          <p class="eyebrow eyebrow-centered eyebrow-on-dark">Local architecture</p>
+          <h2 class="display-md">Your machine is the boundary.</h2>
+          <p class="lede">The browser talks to a local FastAPI service. Windows telemetry comes from psutil and PowerShell. Administrative firewall changes cross UAC deliberately.</p>
+        </div>
+        <div class="architecture-flow" data-reveal="scale">
+          <article class="arch-node"><span class="arch-node-number">01 / PRESENT</span><h3>Fluent console</h3><p>React 18 and Fluent UI v9 in the browser, with local server-state polling.</p></article>
+          <span class="arch-arrow" aria-hidden="true"><svg viewBox="0 0 28 28"><path d="M4 14h19m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></span>
+          <article class="arch-node"><span class="arch-node-number">02 / OBSERVE</span><h3>Local API</h3><p>FastAPI on 127.0.0.1:8765, SQLite history, psutil, and Windows queries.</p></article>
+          <span class="arch-arrow" aria-hidden="true"><svg viewBox="0 0 28 28"><path d="M4 14h19m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></span>
+          <article class="arch-node"><span class="arch-node-number">03 / CHANGE</span><h3>Elevated Windows</h3><p>UAC-approved PowerShell for firewall mutations, audit policy, and optional capture.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta">
+      <div class="container-wide final-cta-inner">
+        <div data-reveal><p class="eyebrow">Start with the evidence</p><h2 class="display-md">Your next firewall decision starts here.</h2><p>Launch the local console, inspect the current state, and choose the change deliberately.</p></div>
+        <div class="final-cta-actions" data-reveal style="--reveal-delay:120ms"><a class="button" href="operations.html">Run Firewall Guard</a><a class="button button-secondary" href="specifications.html">Read specifications</a></div>
       </div>
     </section>
   </main>
-  <footer class="foot">
-    <span>A local Windows 11 console. Illustrations explain the product. They are not a live feed.</span>
-    <a href="operations.html">How to run it</a>
+
+  <footer class="site-footer">
+    <div class="container-wide">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a class="brand" href="index.html"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 5 7.5V15c0 7.3 4.5 12.5 11 14.5C22.5 27.5 27 22.3 27 15V7.5L16 3Z" fill="none" stroke="#91f2c7" stroke-width="2"/><path d="M11 16h10M16 11v10" stroke="#91f2c7" stroke-width="2" stroke-linecap="round"/></svg><span>Firewall Guard</span></a>
+          <p>A local Windows 11 firewall operations console for traffic investigation, managed block rules, and system telemetry.</p>
+        </div>
+        <div class="footer-links">
+          <div><strong>Product</strong><a href="features.html">Features</a><a href="specifications.html">Specifications</a></div>
+          <div><strong>Console</strong><a href="operations.html">Operations</a><a href="index.html">Overview</a></div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>Development software, not a signed commercial security product. Review the source and active configuration before relying on firewall changes. Illustrations use documentation-reserved addresses and are not live data.</p>
+        <label class="motion-preference" data-motion-control hidden>Motion
+          <select data-motion-preference aria-label="Website motion preference"><option value="standard">Standard</option><option value="enhanced">Enhanced</option><option value="reduced">Reduced</option><option value="off">Off</option></select>
+        </label>
+      </div>
+    </div>
   </footer>
+  <div class="sr-only" role="status" aria-live="polite" data-copy-status></div>
   <script src="site.js"></script>
 </body>
 </html>

@@ -2,77 +2,146 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Specifications — Firewall Guard</title>
-  <meta name="description" content="Requirements, architecture, and firewall rule limits for Firewall Guard.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#080b0d">
+  <meta name="description" content="Review Firewall Guard platform requirements, local architecture, firewall rule behavior, telemetry intervals, and evidence limitations.">
+  <meta property="og:title" content="Specifications | Firewall Guard">
+  <meta property="og:description" content="Local by architecture. Specific by design. Requirements, behavior, and limits for the Windows console.">
+  <meta property="og:type" content="website">
+  <title>Specifications | Firewall Guard</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="site.css">
 </head>
 <body>
-  <a class="skip" href="#content">Skip to content</a>
-  <header class="global">
-    <a class="wordmark" href="index.html">
-      <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="#fff" d="M8 1.2 2.2 3.2v4.2c0 3.1 2.1 6 5.8 6.9 3.7-.9 5.8-3.8 5.8-6.9V3.2L8 1.2Z"/></svg>
-      Firewall Guard
-    </a>
-    <button class="menu" type="button" aria-expanded="false">Menu</button>
-    <nav aria-label="Site">
-      <a href="index.html">Overview</a>
-      <a href="features.html">Features</a>
-      <a href="specifications.html">Specifications</a>
-      <a href="operations.html">Operations</a>
-    </nav>
-  </header>
-  <div class="productbar">
-    <strong>Firewall Guard</strong>
-    <div class="links">
-      <a href="index.html">Overview</a>
-      <a href="features.html">Features</a>
-      <a href="specifications.html" aria-current="page">Specifications</a>
-      <a href="operations.html">Operations</a>
-      <a class="cta" href="operations.html">How to run it</a>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <header class="site-header" data-header>
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="Firewall Guard home"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 5 7.5V15c0 7.3 4.5 12.5 11 14.5C22.5 27.5 27 22.3 27 15V7.5L16 3Z" fill="none" stroke="#91f2c7" stroke-width="2"/><path d="M11 16h10M16 11v10" stroke="#91f2c7" stroke-width="2" stroke-linecap="round"/></svg><span>Firewall Guard</span></a>
+      <nav class="desktop-nav" aria-label="Primary"><a href="index.html">Overview</a><a href="features.html">Features</a><a href="specifications.html" aria-current="page">Specifications</a><a href="operations.html">Operations</a></nav>
+      <div class="header-actions">
+        <button class="motion-toggle" type="button" data-motion-toggle data-motion-control hidden aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 4v12M10 7v6M15 2v16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span>Motion</span></button>
+        <a class="button button-small" href="operations.html">Run the console</a>
+        <details class="mobile-menu"><summary aria-label="Open navigation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></summary><nav aria-label="Mobile navigation"><a href="index.html">Overview</a><a href="features.html">Features</a><a href="specifications.html" aria-current="page">Specifications</a><a href="operations.html">Operations</a></nav></details>
+      </div>
     </div>
-  </div>
+  </header>
 
-  <main id="content">
-    <section class="hero" style="min-height:auto; padding-bottom:40px">
-      <h1 class="reveal">Built for one PC.</h1>
-      <p class="fine reveal">The browser talks to a local API. Windows Firewall changes only after you approve an elevated PowerShell broker.</p>
-    </section>
-
-    <section class="chapter" style="padding-top:20px">
-      <div class="specgrid reveal">
-        <div><dt>System</dt><dd>Windows 11. Windows 10 can run with reduced PowerShell behavior.</dd></div>
-        <div><dt>Python</dt><dd>3.11 or newer, for the local API.</dd></div>
-        <div><dt>Node.js</dt><dd>20 or newer, only to install or rebuild the dashboard.</dd></div>
-        <div><dt>Rights</dt><dd>Observation does not need elevation. Live rules need one UAC approval per batch.</dd></div>
-        <div><dt>Network</dt><dd>API bound to 127.0.0.1, port 8765. Dashboard dev server on port 5173.</dd></div>
-        <div><dt>Dashboard</dt><dd>React 18 and Fluent UI v9.</dd></div>
-        <div><dt>Action</dt><dd>Block only. No allow rules are created.</dd></div>
-        <div><dt>Direction</dt><dd>Outbound for the managed workflow.</dd></div>
-        <div><dt>Name</dt><dd>Prefix <code>FGF-</code>. Group Firewall Guard Fluent.</dd></div>
-        <div><dt>Batch</dt><dd>Up to 50 targets. One elevation. A result for each item.</dd></div>
-        <div><dt>Removal</dt><dd>Only rules this console created. Other products are left in place.</dd></div>
-        <div><dt>Check</dt><dd>Create and delete are verified with Get-NetFirewallRule.</dd></div>
-        <div><dt>Sessions</dt><dd>A new block does not always cut a connection that is already open.</dd></div>
-        <div><dt>Metrics</dt><dd>About every 3 seconds for CPU, memory, network, and disk.</dd></div>
-        <div><dt>GPU</dt><dd>About every 4 seconds. nvidia-smi when present, otherwise Windows GPU counters.</dd></div>
-        <div><dt>Domains</dt><dd>Optional elevated refresh about every 5 minutes.</dd></div>
-        <div><dt>Policies</dt><dd><code>policies.json</code> is a catalog. It is not a background enforcer.</dd></div>
-        <div><dt>End process</dt><dd>Confirmation required. Critical Windows processes and this console cannot be ended.</dd></div>
+  <main id="content" tabindex="-1">
+    <section class="page-hero">
+      <div class="container-wide page-hero-grid">
+        <div>
+          <p class="eyebrow eyebrow-on-dark">Specifications</p>
+          <h1 class="display-xl">Local by architecture. Specific by design.</h1>
+          <p class="lede">A browser console, a loopback API, Windows telemetry, and an explicit elevation boundary for administrative change.</p>
+          <div class="page-hero-actions"><a class="button" href="operations.html">Review operations</a></div>
+        </div>
+        <div class="page-hero-art spec-architecture" data-reveal="scale" aria-hidden="true">
+          <div class="spec-architecture-flow">
+            <div class="spec-arch-node"><strong>React + Fluent UI console</strong><span>http://127.0.0.1:5173</span></div>
+            <div class="spec-arch-node"><strong>FastAPI + SQLite + psutil</strong><span>http://127.0.0.1:8765</span></div>
+            <div class="spec-arch-node"><strong>Windows Firewall + PowerShell</strong><span>UAC approval for live mutations</span></div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="chapter stage">
-      <div class="center narrow reveal">
-        <h2 class="display">What it will not claim.</h2>
-        <p class="lede">High disk writes and a new connection are clues. They are not the contents of a transfer. Group Policy, a VPN, or another security product can still allow or block the same path.</p>
+    <section class="section section-white">
+      <div class="container-wide">
+        <div class="section-heading" data-reveal><div><p class="eyebrow">Technical detail</p><h2 class="display-md">The operating contract.</h2></div><p class="body-copy">Requirements and behavior are stated plainly. Where Windows, drivers, permissions, or another security product can change the result, that dependency is part of the specification.</p></div>
+        <div class="spec-groups">
+          <section class="spec-group" data-reveal>
+            <h2>Platform &amp; runtime</h2>
+            <dl class="spec-list">
+              <div><dt>Target</dt><dd>Windows 11 is the documented and validated platform.</dd></div>
+              <div><dt>Python</dt><dd>Python 3.11 for the local API. The standard launcher requests <code>py -3.11</code> when the Python launcher is available.</dd></div>
+              <div><dt>Node.js</dt><dd>Node.js and npm are required by the standard Vite launcher and for dashboard builds. A prebuilt dashboard can be served by the API.</dd></div>
+              <div><dt>Observation</dt><dd>No administrator rights are required for basic use, but Windows may hide protected process, socket, signature, or event details.</dd></div>
+              <div><dt>Mutation</dt><dd>Firewall changes, audit-policy changes, and optional capture require administrator approval through UAC.</dd></div>
+              <div><dt>Network</dt><dd>API on <code>127.0.0.1:8765</code>. Development dashboard on <code>127.0.0.1:5173</code>.</dd></div>
+            </dl>
+          </section>
+
+          <section class="spec-group" data-reveal style="--reveal-delay:80ms">
+            <h2>Application stack</h2>
+            <dl class="spec-list">
+              <div><dt>Frontend</dt><dd>React 18, TypeScript, Fluent UI v9, TanStack Query, and Vite.</dd></div>
+              <div><dt>Backend</dt><dd>FastAPI, Uvicorn, Pydantic, and psutil.</dd></div>
+              <div><dt>Persistence</dt><dd>SQLite activity, managed-rule history, and wildcard domain patterns.</dd></div>
+              <div><dt>Windows data</dt><dd>NetSecurity cmdlets, Windows event logs, DNS client data, CIM, performance counters, and optional <code>nvidia-smi</code>.</dd></div>
+              <div><dt>Data refresh</dt><dd>HTTP polling through TanStack Query. No WebSocket or push stream is required.</dd></div>
+              <div><dt>Chart history</dt><dd>Recent samples are held in browser memory and reset when the view unmounts or reloads.</dd></div>
+            </dl>
+          </section>
+
+          <section class="spec-group" data-reveal>
+            <h2>Firewall behavior</h2>
+            <dl class="spec-list">
+              <div><dt>Action</dt><dd>The managed workflow creates block rules. It does not create allow rules.</dd></div>
+              <div><dt>Direction</dt><dd>Outbound is the default. Inbound can also be selected in the block dialog.</dd></div>
+              <div><dt>Targets</dt><dd>Application paths, Windows services, and remote IPv4 or IPv6 addresses. Backend validation also supports port-scoped rules.</dd></div>
+              <div><dt>Batch creation</dt><dd>Up to 50 targets in one request, with one elevated process and per-target results.</dd></div>
+              <div><dt>Identity</dt><dd>Names use the <code>FGF-</code> prefix and the <code>Firewall Guard Fluent</code> group.</dd></div>
+              <div><dt>Verification</dt><dd>Created rules are queried with <code>Get-NetFirewallRule</code>. Verification does not prove that an existing session has closed.</dd></div>
+              <div><dt>Removal</dt><dd>Backend removal is restricted to <code>FGF-</code>-prefixed names. Treat removal as a live administrative operation.</dd></div>
+            </dl>
+          </section>
+
+          <section class="spec-group" data-reveal style="--reveal-delay:80ms">
+            <h2>Telemetry &amp; evidence</h2>
+            <dl class="spec-list">
+              <div><dt>System</dt><dd>CPU, memory, network, and disk metrics refresh about every 3 seconds in the monitor.</dd></div>
+              <div><dt>GPU</dt><dd>GPU views refresh about every 4 seconds. Availability depends on drivers and Windows counters.</dd></div>
+              <div><dt>Traffic</dt><dd>Current sockets and recent event data refresh through near-live polling, not a continuous packet stream.</dd></div>
+              <div><dt>DNS</dt><dd>Hostnames come from the Windows DNS cache. Wildcard candidates also use <code>Resolve-DnsName</code>.</dd></div>
+              <div><dt>Domain refresh</dt><dd>An optional elevated broker can refresh enabled patterns about every 5 minutes when live mode and broker conditions are met.</dd></div>
+              <div><dt>Events</dt><dd>Firewall/WFP event visibility depends on audit policy, log permissions, and the fields Windows supplies.</dd></div>
+              <div><dt>Policies</dt><dd><code>policies.json</code> is a read-only catalog. No automatic background policy enforcement engine is active.</dd></div>
+            </dl>
+          </section>
+        </div>
       </div>
+    </section>
+
+    <section class="section section-soft section-compact">
+      <div class="container-wide">
+        <div class="policy-callout" data-reveal>
+          <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 6 7v8c0 6.5 4 11.5 10 14 6-2.5 10-7.5 10-14V7L16 3Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 10v7M16 22v.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <div><h3>Confirm the active dry-run mode before making changes.</h3><p>Configuration can differ between development machines. Dry-run block creation records intent without creating rules. Rule removal is a separate live administrative action and must be reviewed deliberately.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark">
+      <div class="container-wide">
+        <div class="centered" data-reveal><p class="eyebrow eyebrow-centered eyebrow-on-dark">Evidence boundaries</p><h2 class="display-md">What the console does not claim.</h2><p class="lede">A trustworthy operational tool distinguishes what Windows reports from what it cannot prove.</p></div>
+        <div class="limit-grid">
+          <article class="limit-item" data-reveal><span>01 / CONTENT</span><h3>No TLS inspection</h3><p>Socket, DNS, and event metadata do not reveal encrypted content, URLs, payloads, or the purpose of a transfer.</p></article>
+          <article class="limit-item" data-reveal style="--reveal-delay:90ms"><span>02 / SESSIONS</span><h3>Blocks are not session termination</h3><p>A new firewall rule may leave an already-established connection open. Verify the resulting state rather than assuming immediate disconnection.</p></article>
+          <article class="limit-item" data-reveal style="--reveal-delay:180ms"><span>03 / AUTHORITY</span><h3>Other controls still apply</h3><p>Group Policy, VPN clients, and other security products can affect the same path and the effective Windows Firewall result.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-white">
+      <div class="container-narrow centered" data-reveal>
+        <p class="eyebrow eyebrow-centered">Development status</p>
+        <h2 class="display-md">Review before reliance.</h2>
+        <p class="lede">Firewall Guard is a local development project, not a signed commercial security product. Review the source, replace the development token, and validate administrative workflows on a test machine.</p>
+      </div>
+    </section>
+
+    <section class="final-cta">
+      <div class="container-wide final-cta-inner"><div data-reveal><p class="eyebrow">Next step</p><h2 class="display-md">Launch with the operating model in view.</h2><p>Prepare the runtime, start the local console, and verify the active mode before any firewall mutation.</p></div><div class="final-cta-actions" data-reveal><a class="button" href="operations.html">Open operations</a><a class="button button-secondary" href="features.html">Review features</a></div></div>
     </section>
   </main>
-  <footer class="foot">
-    <span>Not a signed commercial product. Review the source before you rely on it.</span>
-    <a href="operations.html">Operations</a>
+
+  <footer class="site-footer">
+    <div class="container-wide">
+      <div class="footer-top"><div class="footer-brand"><a class="brand" href="index.html"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 5 7.5V15c0 7.3 4.5 12.5 11 14.5C22.5 27.5 27 22.3 27 15V7.5L16 3Z" fill="none" stroke="#91f2c7" stroke-width="2"/><path d="M11 16h10M16 11v10" stroke="#91f2c7" stroke-width="2" stroke-linecap="round"/></svg><span>Firewall Guard</span></a><p>A local Windows 11 firewall operations console for traffic investigation, managed block rules, and system telemetry.</p></div><div class="footer-links"><div><strong>Product</strong><a href="features.html">Features</a><a href="specifications.html">Specifications</a></div><div><strong>Console</strong><a href="operations.html">Operations</a><a href="index.html">Overview</a></div></div></div>
+      <div class="footer-bottom"><p>Development software, not a signed commercial security product. Review the source and active configuration before relying on firewall changes. Illustrations use documentation-reserved addresses and are not live data.</p><label class="motion-preference" data-motion-control hidden>Motion<select data-motion-preference aria-label="Website motion preference"><option value="standard">Standard</option><option value="enhanced">Enhanced</option><option value="reduced">Reduced</option><option value="off">Off</option></select></label></div>
+    </div>
   </footer>
+  <div class="sr-only" role="status" aria-live="polite" data-copy-status></div>
   <script src="site.js"></script>
 </body>
 </html>
